@@ -1,0 +1,518 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+@{
+    TechMarket.Models.SGDFleaMarketEntities db = new TechMarket.Models.SGDFleaMarketEntities();
+    var product = db.tbl_Product.Where(x => x.status == 1 && x.TypeDisplayProduct == 1);
+    foreach (var item in product)
+    {
+        if (item.EndPush < DateTime.Now)
+        {
+            var pro = db.tbl_Product.Find(item.Id);
+            pro.TypeDisplayProduct = 0;
+
+        }
+    }
+    db.SaveChanges();
+}
+
+<style>
+    .product {
+        height: 370px;
+    }
+    .ulatroi {
+        word-break: break-word;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        line-height: 16px; /* fallback */
+        max-height: 32px; /* fallback */
+        -webkit-line-clamp: 1; /* number of lines to show */
+        -webkit-box-orient: vertical;
+    }
+    .p-hot {
+        width: 100px;
+        height: 20px;
+        background: red;
+        color: #fff !important;
+        border-top-right-radius: 5px;
+        border-bottom-right-radius: 5px;
+    }
+</style>
+<!--banner-->
+<div id="carouselExampleIndicators"
+     class="carousel slide"
+     data-bs-ride="carousel">
+    <div class="carousel-indicators">
+        <button type="button"
+                data-bs-target="#carouselExampleIndicators"
+                data-bs-slide-to="0"
+                class="active"
+                aria-current="true"
+                aria-label="Slide 1"></button>
+        <button type="button"
+                data-bs-target="#carouselExampleIndicators"
+                data-bs-slide-to="1"
+                aria-label="Slide 2"></button>
+        <button type="button"
+                data-bs-target="#carouselExampleIndicators"
+                data-bs-slide-to="2"
+                aria-label="Slide 3"></button>
+    </div>
+    <div class="carousel-inner">
+        <div class="carousel-item active">
+            <img src="http://baolocstore.vn/wp-content/uploads/2019/07/slider-2-min2-2.png"
+                 class="d-block w-100"
+                 alt="..." />
+        </div>
+        @*<div class="carousel-item">
+                <img src="~/Images/bnn.png"
+                     class="d-block w-100"
+                     alt="..." />
+            </div>*@
+        <div class="carousel-item">
+            <img src="https://png.pngtree.com/thumb_back/fw800/back_our/20190622/ourmid/pngtree-tech-artificial-intelligence-banner-background-image_210798.jpg"
+                 class="d-block w-100"
+                 alt="..." />
+        </div>
+    </div>
+    <button class="carousel-control-prev"
+            type="button"
+            data-bs-target="#carouselExampleIndicators"
+            data-bs-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Previous</span>
+    </button>
+    <button class="carousel-control-next"
+            type="button"
+            data-bs-target="#carouselExampleIndicators"
+            data-bs-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="visually-hidden">Next</span>
+    </button>
+</div>
+<!--menu-slider-->
+<div class="container_slider">
+    <div class="menu_product">
+        <div class="menu_slider">
+            <div class="menu_img" style="padding-right:10px;padding-left:10px">
+                <a href="?catagory=1">
+                    <img src="https://cellphones.com.vn/sforum/wp-content/uploads/2020/07/samsungs20-1_KBTV.jpg" />
+                </a>
+
+            </div>
+            <h3 class="text">Điện thoại</h3>
+        </div>
+
+        <div class="menu_slider">
+            <div class="menu_img" style="padding-right:10px;padding-left:10px">
+                <a href="?catagory=2">
+                    <img src="https://cellphones.com.vn/sforum/wp-content/uploads/2019/08/Samsung-Tab-S6-tablet-in-hand-sc.jpg" />
+                </a>
+            </div>
+            <h3 class="text">Máy tính bảng</h3>
+        </div>
+        <div class="menu_slider">
+            <div class="menu_img" style="padding-right:10px;padding-left:10px">
+                <a href="?catagory=3">
+                    <img src="https://br.atsit.in/vi/wp-content/uploads/2021/08/surface-laptop-studio-khong-co-man-hinh-co-the-thao-roi-co-the-thay-the-surface-book-4.jpg" />
+                </a>
+            </div>
+            <h3 class="text">Laptop</h3>
+        </div>
+
+        <div class="menu_slider">
+            <div class="menu_img" style="padding-right:10px;padding-left:10px">
+                <a href="?catagory=4">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTAfDVQKNSNzCxqP78Bl0mclIda51zye1TDIA&usqp=CAU" />
+                </a>
+            </div>
+            <h3 class="text">Máy tính để bàn</h3>
+        </div>
+
+        <div class="menu_slider">
+            <div class="menu_img" style="padding-right:10px;padding-left:10px">
+                <a href="?catagory=5">
+                    <img src="https://vn.canon/media/image/2020/06/19/7a87af2d22694164b6850009342614ec_Thumbnail+570x400.jpg" />
+                </a>
+            </div>
+            <h3 class="text">Máy ảnh, máy quay</h3>
+        </div>
+
+        <div class="menu_slider">
+            <div class="menu_img" style="padding-right:10px;padding-left:10px">
+                <a href="?catagory=6">
+                    <img src="https://nhaphongcach.com/wp-content/uploads/2020/05/10-m%E1%BA%ABu-k%E1%BB%87-tivi-v%C3%A0-d%C3%A0n-%C3%A2m-thanh-7.jpg" />
+                </a>
+            </div>
+            <h3 class="text">Tivi, âm thanh</h3>
+        </div>
+
+        <div class="menu_slider">
+            <div class="menu_img" style="padding-right:10px;padding-left:10px">
+                <a href="?catagory=7">
+                    <img src="https://cdn.tgdd.vn/Files/2021/02/24/1330033/miband5_800x450.jpg" />
+                </a>
+            </div>
+            <h3 class="text">Thiết bị đeo thông minh</h3>
+        </div>
+
+        <div class="menu_slider">
+            <div class="menu_img" style="padding-right:10px;padding-left:10px">
+                <a href="?catagory=8">
+                    <img src="https://images.fpt.shop/unsafe/filters:quality(90)/fptshop.com.vn/uploads/images/tin-tuc/120516/Originals/HASP-BAN-PHIM-CHUOT-KHONG-DAY-LOGITECH-MK240-00379395%20(7).jpg" />
+                </a>
+            </div>
+            <h3 class="text">Phụ kiện</h3>
+        </div>
+
+        <div class="menu_slider">
+            <div class="menu_img" style="padding-right:10px;padding-left:10px">
+                <a href="?catagory=9">
+                    <img src="https://bizweb.dktcdn.net/100/330/208/files/ram-va-rom-1.jpg?v=1620316632783" />
+                </a>
+            </div>
+            <h3 class="text">Linh kiện(Ram, Rom,...</h3>
+        </div>
+    </div>
+</div>
+<!---sanpham-->
+
+<br />
+<div class="product_groud">
+    @{
+        var result = db.tbl_Product.Where(x => x.status == 1).ToList();
+        if (Request.QueryString["catagory"] != null)
+        {
+            int cat = int.Parse(Request.QueryString["catagory"].ToString());
+            var hang = db.tbl_Device.Where(x => x.id_typedevice == cat);
+
+            var pro = from sp in db.tbl_Product
+                      join tb in hang on sp.id_device equals tb.Id
+                      where sp.status == 1
+                      select sp;
+
+            //var kq = db.tbl_Product.Where(x => x.id_device == cat).FirstOrDefault();
+            <div class="sanpham_heading">
+                <h1>Tin đăng dành cho bạn</h1>
+            </div>
+            foreach (var item in pro)
+            {
+                <div class="product">
+                    <div class="pr_img">
+                        <a href="@Url.Action("showDetails","Product", new {id = item.Id })">
+                            <img src=@Url.Content("~/Images/Product/"+item.product_images) alt="" />
+                        </a>
+                    </div>
+                    <div class="pr_text">
+                        @{
+                            if (item.id_shop != null)
+                            {
+                                var cusshop = db.tbl_Shop.Find(item.id_shop);
+                                string name = cusshop.shop_name;
+                                <p>Cửa hàng bán: @name</p>
+                            }
+                            else
+                            {
+                                var cusname = db.tbl_Account.Find(item.id_account);
+                                string name = cusname.fullname;
+                                <p>Người bán: @name</p>
+                            }
+                        }
+                        <h3 class="ulatroi">@item.product_title</h3>
+                        @{
+                            var format = System.Globalization.CultureInfo.GetCultureInfo("vi-VN");
+                        }
+                        <h5 style="color:red;">@String.Format(format, "{0:c0}", item.product_price)</h5>
+                        <p class="ulatroi"><i class="fas fa-map-marker-alt"></i> @item.Address</p>
+                       
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            if (Request.QueryString["search"] != null)
+            {
+                string search = Request.QueryString["search"].ToString();
+                var searchResult = db.tbl_Product.Where(x => x.product_title.Contains(search) && x.status == 1);
+
+                //var searchR = from sp in db.tbl_Product
+                //    from cpu in db.tbl_CPU
+                //    from hang in db.tbl_Manufacturer
+                //    where sp.id_cpu == cpu.Id && sp.id_manufacturer == hang.Id
+                //    && sp.product_title.Contains(search) || hang.manufacturer_name.Contains(search)
+                //    || cpu.cpu_name.Contains(search)
+                //    select sp;
+                <div class="sanpham_heading">
+                    <h1>Tin đăng dành cho bạn</h1>
+                </div>
+                foreach (var item in searchResult.ToList())
+                {
+                    <div class="product">
+                        <div class="pr_img">
+                            <a href="@Url.Action("showDetails","Product", new {id = item.Id })">
+                                <img src=@Url.Content("~/Images/Product/"+item.product_images) alt="" />
+                            </a>
+                        </div>
+                        <div class="pr_text">
+                            @{
+                                if (item.id_shop != null)
+                                {
+                                    var cusshop = db.tbl_Shop.Find(item.id_shop);
+                                    string name = cusshop.shop_name;
+                                    <p>Cửa hàng bán: @name</p>
+                                }
+                                else
+                                {
+                                    var cusname = db.tbl_Account.Find(item.id_account);
+                                    string name = cusname.fullname;
+                                    <p>Người bán: @name</p>
+                                }
+                            }
+                        <h3 class="ulatroi">@item.product_title</h3>
+                            @{
+                                var format = System.Globalization.CultureInfo.GetCultureInfo("vi-VN");
+                            }
+                            <h5 style="color:red;">@String.Format(format, "{0:c0}", item.product_price)</h5>
+                            <p class="ulatroi"><i class="fas fa-map-marker-alt"></i> @item.Address</p>
+                        </div>
+                    </div>
+                }
+            }
+            else
+            {
+
+                // Tinn ưu tiên
+                <div class="sanpham_heading">
+                    <h1>Tin ưu tiên</h1>
+                </div>
+                var uutien = db.tbl_Product.Where(x => x.status == 1 && x.TypeDisplayProduct == 1).ToList();
+                foreach (var item in uutien)
+                {
+                    <div class="product" style=" height: 445px;">
+                        <div class="pr_img">
+                            <a href="@Url.Action("showDetails","Product", new {id = item.Id })">
+                                <img src=@Url.Content("~/Images/Product/"+item.product_images) alt="" />
+                            </a>
+                        </div>
+                        <div class="pr_text">
+                            @{
+                                if (item.id_shop != null)
+                                {
+                                    var cusshop = db.tbl_Shop.Find(item.id_shop);
+                                    string name = cusshop.shop_name;
+                                    <p>Cửa hàng bán: @name</p>
+                                }
+                                else
+                                {
+                                    var cusname = db.tbl_Account.Find(item.id_account);
+                                    string name = cusname.fullname;
+                                    <p>Người bán: @name</p>
+                                }
+                            }
+                            <p class="p-hot"><i class="fab fa-hotjar"></i> Tin ưu tiên</p>
+                            <h3 class="ulatroi">@item.product_title</h3>
+                            @{
+                                var format = System.Globalization.CultureInfo.GetCultureInfo("vi-VN");
+                            }
+                            <h5 style="color:red;">@String.Format(format, "{0:c0}", item.product_price)</h5>
+                            <p class="ulatroi"><i class="fas fa-map-marker-alt"></i> @item.Address</p>
+                        </div>
+                    </div>
+                }
+
+
+                // hiển thị sản phẩm
+                <div class="sanpham_heading" id="sp">
+                    <h1>Tin đăng dành cho bạn</h1>
+                </div>
+
+                foreach (var item in Model)
+                {
+                    <div class="product">
+                        <div class="pr_img">
+                            <a href="@Url.Action("showDetails","Product", new {id = item.Id })">
+                                <img src=@Url.Content("~/Images/Product/"+item.product_images) alt="" />
+                            </a>
+                        </div>
+                        <div class="pr_text">
+                            @{
+                                if (item.id_shop != null)
+                                {
+                                    var cusshop = db.tbl_Shop.Find(item.id_shop);
+                                    string name = cusshop.shop_name;
+                                    <p>Cửa hàng bán: @name</p>
+                                }
+                                else
+                                {
+                                    var cusname = db.tbl_Account.Find(item.id_account);
+                                    string name = cusname.fullname;
+                                    <p>Người bán: @name</p>
+                                }
+                            }
+                                <h3 class="ulatroi">@item.product_title</h3>
+                            @{
+                                var format = System.Globalization.CultureInfo.GetCultureInfo("vi-VN");
+                            }
+                            <h5 style="color:red;">@String.Format(format, "{0:c0}", item.product_price)</h5>
+                            <p class="ulatroi"><i class="fas fa-map-marker-alt"></i> @item.Address</p>
+                        </div>
+                    </div>
+
+                }
+
+
+            }
+        }
+
+
+}
+</div>
+<br />
+@if (Request.QueryString["search"] == null && Request.QueryString["catagory"] == null) { 
+    <center>
+        @if (ViewBag.Page > 0)
+        {
+            <a href="@Url.Action("Index","Home", new { page = ViewBag.Page - 1 })#sp"
+               class="btn btn-default">
+                &laquo; Trở lại
+            </a>
+        }
+        @if (ViewBag.Page < ViewBag.MaxPage)
+        {
+            <a href="@Url.Action("Index", new { page = ViewBag.Page + 1 })#sp"
+               class="btn btn-default">
+                Xem tiếp &raquo;
+            </a>
+        }
+    </center>
+}
+
+<script>
+    // Lưu trữ vị trí thanh cuộn bằng sessionStorage
+    if ('sessionStorage' in window && window['sessionStorage'] !== null) {
+        $('.scroll').on('scroll', function () {
+            sessionStorage.setItem('scrollLeft', $(this).scrollTop());
+        });
+        $('.scroll').animate({ scrollTop: sessionStorage.getItem('scrollLeft') }, 0);
+    }
+
+</script>
+<script>
+
+    $('.multiple-items').slick({
+        infinite: true,
+        slidesToShow: 3,
+        slidesToScroll: 3
+    });
+
+</script>
+<script>
+    if (address_2 = localStorage.getItem('address_2_saved')) {
+        $('select[name="calc_shipping_district"] option').each(function () {
+            if ($(this).text() == address_2) {
+                $(this).attr('selected', '')
+            }
+        })
+        $('input.billing_address_2').attr('value', address_2)
+    }
+    if (district = localStorage.getItem('district')) {
+        $('select[name="calc_shipping_district"]').html(district)
+        $('select[name="calc_shipping_district"]').on('change', function () {
+            var target = $(this).children('option:selected')
+            target.attr('selected', '')
+            $('select[name="calc_shipping_district"] option').not(target).removeAttr('selected')
+            address_2 = target.text()
+            $('input.billing_address_2').attr('value', address_2)
+            district = $('select[name="calc_shipping_district"]').html()
+            localStorage.setItem('district', district)
+            localStorage.setItem('address_2_saved', address_2)
+        })
+    }
+    $('select[name="calc_shipping_provinces"]').each(function () {
+        var $this = $(this),
+            stc = ''
+        c.forEach(function (i, e) {
+            e += +1
+            stc += '<option value=' + e + '>' + i + '</option>'
+            $this.html('<option value="">Tỉnh / Thành phố</option>' + stc)
+            if (address_1 = localStorage.getItem('address_1_saved')) {
+                $('select[name="calc_shipping_provinces"] option').each(function () {
+                    if ($(this).text() == address_1) {
+                        $(this).attr('selected', '')
+                    }
+                })
+                $('input.billing_address_1').attr('value', address_1)
+            }
+            $this.on('change', function (i) {
+                i = $this.children('option:selected').index() - 1
+                var str = '',
+                    r = $this.val()
+                if (r != '') {
+                    arr[i].forEach(function (el) {
+                        str += '<option value="' + el + '">' + el + '</option>'
+                        $('select[name="calc_shipping_district"]').html('<option value="">Quận / Huyện</option>' + str)
+                    })
+                    var address_1 = $this.children('option:selected').text()
+                    var district = $('select[name="calc_shipping_district"]').html()
+                    localStorage.setItem('address_1_saved', address_1)
+                    localStorage.setItem('district', district)
+                    $('select[name="calc_shipping_district"]').on('change', function () {
+                        var target = $(this).children('option:selected')
+                        target.attr('selected', '')
+                        $('select[name="calc_shipping_district"] option').not(target).removeAttr('selected')
+                        var address_2 = target.text()
+                        $('input.billing_address_2').attr('value', address_2)
+                        district = $('select[name="calc_shipping_district"]').html()
+                        localStorage.setItem('district', district)
+                        localStorage.setItem('address_2_saved', address_2)
+                    })
+                } else {
+                    $('select[name="calc_shipping_district"]').html('<option value="">Quận / Huyện</option>')
+                    district = $('select[name="calc_shipping_district"]').html()
+                    localStorage.setItem('district', district)
+                    localStorage.removeItem('address_1_saved', address_1)
+                }
+            })
+        })
+    })
+</script>
+<script>
+    $('.responsive').slick({
+        dots: true,
+        infinite: false,
+        speed: 300,
+        slidesToShow: 4,
+        slidesToScroll: 4,
+        responsive: [
+            {
+                breakpoint: 1024,
+                settings: {
+                    slidesToShow: 3,
+                    slidesToScroll: 3,
+                    infinite: true,
+                    dots: true
+                }
+            },
+            {
+                breakpoint: 600,
+                settings: {
+                    slidesToShow: 2,
+                    slidesToScroll: 2
+                }
+            },
+            {
+                breakpoint: 480,
+                settings: {
+                    slidesToShow: 1,
+                    slidesToScroll: 1
+                }
+            }
+            // You can unslick at a given breakpoint now by adding:
+            // settings: "unslick"
+            // instead of a settings object
+        ]
+    });
+</script>

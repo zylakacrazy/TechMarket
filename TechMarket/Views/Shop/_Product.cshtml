@@ -1,0 +1,178 @@
+﻿@{
+    TechMarket.Models.SGDFleaMarketEntities db = new TechMarket.Models.SGDFleaMarketEntities();
+    int idc = int.Parse(User.Identity.Name);
+    int ids = int.Parse(Request.QueryString["id"].ToString());
+    var sd = db.tbl_Shop.Where(x => x.Id == ids && x.id_account == idc);
+
+   
+    var result = db.tbl_Product.Where(x => x.id_shop == ids).ToList();
+    int dem = 0;
+    foreach (var so in result)
+    {
+        if (so.status == 0)
+        {
+            dem++;
+        }
+    }
+}
+@{
+    if (sd.Count() == 1)
+    {
+        <h5>Tin đang chờ duyệt</h5>
+    }
+}
+
+<br />
+@if (sd.Count() == 1)
+{
+    <div class="product_groud">
+        @{
+
+            if (dem == 0)
+            {
+                <p>Hiện chưa có tin nào đang chờ duyệt!</p>
+            }
+        }
+        @foreach (var item in result)
+        {
+            if (item.status == 0)
+            {
+                <div class="product">
+                    <div class="pr_img">
+                        <a href="@Url.Action("showDetails","Product", new {id = item.Id })">
+                            <img src=@Url.Content("~/Images/Product/"+item.product_images) alt="" />
+                        </a>
+                    </div>
+                    <div class="pr_text">
+                        @{
+                            if (item.id_shop != null)
+                            {
+                                var cusshop = db.tbl_Shop.Find(item.id_shop);
+                                string name = cusshop.shop_name;
+                                <p>Người bán: @name</p>
+                            }
+                            else
+                            {
+                                var cusname = db.tbl_Account.Find(item.id_account);
+                                string name = cusname.fullname;
+                                <p>Người bán: @name</p>
+                            }
+                        }
+                        <h3 class="ulatroi">@item.product_title</h3>
+                        @{
+                            var format = System.Globalization.CultureInfo.GetCultureInfo("vi-VN");
+                        }
+                        <h5 style="color:red;">@String.Format(format, "{0:c0}", item.product_price)</h5>
+                        <div class="txt_bottom">
+                            @{
+                                var cuahang = db.tbl_Shop.Find(ids);
+                                int cuz = int.Parse(cuahang.id_account.ToString());
+                                if (idc == cuz)
+                                {
+                                    <p class="p1"><a href="~/Home/Push?id=@item.Id">Đẩy tin</a></p>
+                                    <p>
+                                        @{
+                                            int a = int.Parse(item.id_device.ToString());
+                                            var b = db.tbl_Device.FirstOrDefault(x => x.Id == a);
+                                            int gt = int.Parse(b.id_typedevice.ToString());
+                                        }
+                                        <a href="@Url.Action("UpdateProduct","Product", new { idsp = item.Id })&id=@gt">Sửa</a>
+                                        <a href="~/Product/DeleteProduct?idsp=@item.Id">Xóa</a>
+                                    </p>
+                                }
+                            }
+
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+    </div>
+}
+@if (sd.Count() == 1)
+{
+    <hr />
+}
+<h5>Tin đang đăng bán</h5>
+<br />
+@{
+    if (dem == 0)
+    {
+        <p>Hiện chưa có tin nào đăng đăng!</p>
+    }
+}
+<div class="product_groud">
+    @foreach (var item in result)
+    {
+        if (item.status == 1)
+        {
+
+            <div class="product">
+                <div class="pr_img">
+                    <a href="@Url.Action("showDetails","Product", new {id = item.Id })">
+                        <img src=@Url.Content("~/Images/Product/"+item.product_images) alt="" />
+                    </a>
+                </div>
+                <div class="pr_text">
+                    @{
+                        if (item.id_shop != null)
+                        {
+                            var cusshop = db.tbl_Shop.Find(item.id_shop);
+                            string name = cusshop.shop_name;
+                            <p>Người bán: @name</p>
+                        }
+                        else
+                        {
+                            var cusname = db.tbl_Account.Find(item.id_account);
+                            string name = cusname.fullname;
+                            <p>Người bán: @name</p>
+                        }
+                    }
+                    <h3 class="ulatroi">@item.product_title</h3>
+                    @{
+                        var format = System.Globalization.CultureInfo.GetCultureInfo("vi-VN");
+                    }
+                    <h5 style="color:red;">@String.Format(format, "{0:c0}", item.product_price)</h5>
+                    <div class="txt_bottom">
+                        @{
+                            var cuahang = db.tbl_Shop.Find(ids);
+                            int cuz = int.Parse(cuahang.id_account.ToString());
+                            if (idc == cuz)
+                            {
+                                <p class="p1"><a href="~/Home/Push?id=@item.Id">Đẩy tin</a></p>
+                                <p>
+                                    @{
+                                        int a = int.Parse(item.id_device.ToString());
+                                        var b = db.tbl_Device.FirstOrDefault(x => x.Id == a);
+                                        int gt = int.Parse(b.id_typedevice.ToString());
+                                    }
+                                    <a href="@Url.Action("UpdateProduct","Product", new { idsp = item.Id })&id=@gt">Sửa</a>
+                                    <a href="~/Product/DeleteProduct?idsp=@item.Id">Xóa</a>
+                                </p>
+                            }
+                            else
+                            {
+                                <p class="ulatroi"><i class="fas fa-map-marker-alt"></i> @item.Address</p>
+                            }
+                        }
+                    </div>
+                </div>
+            </div>
+        }
+    }
+</div>
+
+
+
+<style>
+    .ulatroi {
+        word-break: break-word;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        line-height: 16px; /* fallback */
+        max-height: 32px; /* fallback */
+        -webkit-line-clamp: 1; /* number of lines to show */
+        -webkit-box-orient: vertical;
+    }
+</style>

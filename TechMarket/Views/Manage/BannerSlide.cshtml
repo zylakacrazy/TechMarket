@@ -1,0 +1,46 @@
+﻿
+@{
+    ViewBag.Title = "BannerSlide";
+}
+
+<h2>BannerSlide</h2>
+
+@(Html.DevExtreme().DataGrid<TechMarket.Models.tbl_BannerSlide>()
+    .DataSource(ds => ds.WebApi()
+        .RouteName("tbl_BannerSlideApi")
+        .LoadAction("Get")
+        .InsertAction("Post")
+        .UpdateAction("Put")
+        .DeleteAction("Delete")
+        .Key("Id")
+    )
+    .RemoteOperations(true)
+    .Columns(columns => {
+
+        //columns.AddFor(m => m.Id);
+        columns.Add().Caption("TT").CellTemplate(new JS("SoThuTu")).Width(50);
+
+        columns.AddFor(m => m.bannerslide);
+
+        columns.AddFor(m => m.url);
+
+        columns.AddFor(m => m.title);
+    })
+    .Editing(e => e
+        .AllowAdding(true)
+        .AllowUpdating(true)
+        .AllowDeleting(true)
+    )
+    .ShowBorders(true)
+    .Editing(e => e.Mode(GridEditMode.Popup).UseIcons(true)
+        .AllowAdding(true)
+        .AllowUpdating(true)
+        .AllowDeleting(true)
+        .Popup(p => p
+                .Title("Thông tin màu sắc")
+                .ShowTitle(true)
+                .Width(700)
+                .Height(525)
+            )
+    )
+)

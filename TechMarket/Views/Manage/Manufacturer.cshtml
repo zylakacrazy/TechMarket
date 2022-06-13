@@ -1,0 +1,73 @@
+﻿
+@{
+    ViewBag.Title = "Manufacturer";
+    Layout = "~/Views/Shared/_Template.cshtml";
+}
+
+<h2>Hãng sản xuất</h2>
+
+@(Html.DevExtreme().DataGrid<TechMarket.Models.tbl_Manufacturer>()
+    .DataSource(ds => ds.WebApi()
+        .RouteName("tbl_ManufacturerApi")
+        .LoadAction("Get")
+        .InsertAction("Post")
+        .UpdateAction("Put")
+        .DeleteAction("Delete")
+        .Key("Id")
+    )
+    .Scrolling(scrolling => scrolling.RowRenderingMode(GridRowRenderingMode.Virtual))
+    .Paging(paging => paging.PageSize(10))
+    .Pager(pager =>
+    {
+        pager.Visible(true);
+        pager.DisplayMode(GridPagerDisplayMode.Full);
+        pager.ShowPageSizeSelector(true);
+        pager.AllowedPageSizes(new JS("[5, 10, 'all']"));
+        pager.ShowInfo(true);
+        pager.ShowNavigationButtons(true);
+    })
+    .SearchPanel(s => s
+        .Visible(true)
+        .HighlightCaseSensitive(true)
+    )
+    .HeaderFilter(headerFilter => headerFilter.Visible(true))
+    .RemoteOperations(true)
+    .Columns(columns => {
+
+        //columns.AddFor(m => m.Id);
+        columns.Add().Caption("TT").CellTemplate(new JS("SoThuTu")).Width(50);
+
+        columns.AddFor(m => m.manufacturer_name).Caption("Hãng sản xuất");
+
+        columns.AddFor(m => m.id_device).Caption("Thiết bị")
+        .Lookup(lockup => lockup
+            .DataSource(d => d.WebApi().LoadAction("Get")
+            .RouteName("tbl_DeviceApi")
+            .Key("Id"))
+            .DisplayExpr("device_name").ValueExpr("Id")
+            );
+    })
+    .ShowBorders(true)
+    .Editing(e => e.Mode(GridEditMode.Popup).UseIcons(true)
+        .AllowAdding(true)
+        .AllowUpdating(true)
+        .AllowDeleting(true)
+        .Popup(p => p
+                .Title("Thông tin màu sắc")
+                .ShowTitle(true)
+                .Width(700)
+                .Height(525)
+            )
+        .Form(f => f.Items(items =>
+        {
+            items.AddGroup().ColCount(2)
+                        .ColSpan(2)
+                .Items(groupItems =>
+                {
+                    groupItems.AddSimpleFor(m => m.manufacturer_name);
+                    groupItems.AddSimpleFor(m => m.id_device);
+                });
+        })
+    ))
+    
+)

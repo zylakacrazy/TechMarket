@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="dfdde4a1e88941c58c87bd64f0612acc" Name="Diagram1">
+        <EntityTypeShape EntityType="SGDFleaMarketModel.sysdiagram" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="SGDFleaMarketModel.tbl_BannerSlide" Width="1.5" PointX="2.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="SGDFleaMarketModel.tbl_Channel" Width="1.5" PointX="3" PointY="5.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="SGDFleaMarketModel.tbl_Coin" Width="1.5" PointX="3" PointY="7.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="SGDFleaMarketModel.tbl_Color" Width="1.5" PointX="3" PointY="14.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="SGDFleaMarketModel.tbl_CPU" Width="1.5" PointX="3" PointY="17.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="SGDFleaMarketModel.tbl_DateOfHire" Width="1.5" PointX="5.25" PointY="21.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="SGDFleaMarketModel.tbl_Device" Width="1.5" PointX="0.75" PointY="17" IsExpanded="true" />
+        <EntityTypeShape EntityType="SGDFleaMarketModel.tbl_Manufacturer" Width="1.5" PointX="3" PointY="28.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="SGDFleaMarketModel.tbl_Messages" Width="1.5" PointX="3" PointY="10.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="SGDFleaMarketModel.tbl_Screensize" Width="1.5" PointX="3" PointY="31" IsExpanded="true" />
+        <EntityTypeShape EntityType="SGDFleaMarketModel.tbl_TypeOfDevice" Width="1.5" PointX="1.5" PointY="25.375" IsExpanded="true" />
+        <AssociationConnector Association="SGDFleaMarketModel.FK_tbl_CPU_tbl_Device" ManuallyRouted="false" />
+        <AssociationConnector Association="SGDFleaMarketModel.FK_tbl_Device_tbl_TypeOfDevice" ManuallyRouted="false" />
+        <AssociationConnector Association="SGDFleaMarketModel.FK_tbl_Manufacturer_tbl_Device" ManuallyRouted="false" />
+        <AssociationConnector Association="SGDFleaMarketModel.FK_tbl_Screensize_tbl_Device" ManuallyRouted="false" />
+        <EntityTypeShape EntityType="SGDFleaMarketModel.tbl_Shop" Width="1.5" PointX="3" PointY="20.625" />
+        <AssociationConnector Association="SGDFleaMarketModel.FK_tbl_DateOfHire_tbl_Shop" />
+        <EntityTypeShape EntityType="SGDFleaMarketModel.tbl_Account" Width="1.5" PointX="0.75" PointY="11.25" />
+        <AssociationConnector Association="SGDFleaMarketModel.FK_tbl_Channel_tbl_Account1" />
+        <AssociationConnector Association="SGDFleaMarketModel.FK_tbl_Coin_tbl_Account" />
+        <AssociationConnector Association="SGDFleaMarketModel.FK_tbl_Messages_tbl_Account" />
+        <AssociationConnector Association="SGDFleaMarketModel.FK_tbl_Messages_tbl_Account1" />
+        <AssociationConnector Association="SGDFleaMarketModel.FK_tbl_Shop_tbl_Account" />
+        <EntityTypeShape EntityType="SGDFleaMarketModel.tbl_Report" Width="1.5" PointX="10.5" PointY="22" />
+        <EntityTypeShape EntityType="SGDFleaMarketModel.tbl_Evaluete" Width="1.5" PointX="5.25" PointY="16.375" />
+        <AssociationConnector Association="SGDFleaMarketModel.FK_tbl_Evaluete_tbl_Account" />
+        <AssociationConnector Association="SGDFleaMarketModel.FK_tbl_Evaluete_tbl_Account1" />
+        <AssociationConnector Association="SGDFleaMarketModel.FK_tbl_Evaluete_tbl_Shop" />
+        <EntityTypeShape EntityType="SGDFleaMarketModel.tbl_Product" Width="1.5" PointX="8.25" PointY="18.375" />
+        <AssociationConnector Association="SGDFleaMarketModel.FK_tbl_Product_tbl_Account" />
+        <AssociationConnector Association="SGDFleaMarketModel.FK_tbl_Product_tbl_Color1" />
+        <AssociationConnector Association="SGDFleaMarketModel.FK_tbl_Product_tbl_CPU" />
+        <AssociationConnector Association="SGDFleaMarketModel.FK_tbl_Product_tbl_Device" />
+        <AssociationConnector Association="SGDFleaMarketModel.FK_tbl_Product_tbl_Manufacturer" />
+        <AssociationConnector Association="SGDFleaMarketModel.FK_tbl_Product_tbl_Screensize" />
+        <AssociationConnector Association="SGDFleaMarketModel.FK_tbl_Product_tbl_Shop" />
+        <AssociationConnector Association="SGDFleaMarketModel.FK_tbl_Report_tbl_Product" />
+        <EntityTypeShape EntityType="SGDFleaMarketModel.tbl_Images" Width="1.5" PointX="10.5" PointY="19.25" />
+        <AssociationConnector Association="SGDFleaMarketModel.FK_tbl_Images_tbl_Product" />
+        </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>

@@ -1,0 +1,112 @@
+﻿@{
+    ViewBag.Title = "Login";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    .col-sm-6 {
+        width: 400px;
+        height: 550px;
+        margin: auto;
+        box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+        margin-top: 2rem;
+        margin-bottom: 3rem;
+        border-radius: 5px;
+    }
+    .login h2 {
+        text-align: center;
+        font-size: 25px;
+        color: #0066ff;
+        margin-bottom: 2rem;
+        margin-top: 15px;
+    }
+    .form-check {
+        margin-left: -35px;
+    }
+    .qk {
+        margin-left: 5rem;
+    }
+    .btn_login {
+        width: 200px;
+        height: 40px;
+    }
+    .login-a00 {
+        margin-top: -13rem;
+    }
+    .form-control {
+        padding: 8px !important;
+    }
+    .p1{
+        margin-top: -2rem;
+    }
+    .container-fluid {
+        margin-bottom: 2rem;
+    }
+    .text-danger {
+        margin-top: 8px;
+        margin-left: 18px;
+        width: 90%;
+        height: 40px;
+        background: #F8D7DA;
+        border-radius: 8px;
+        text-align: center;
+        padding-top: 8px;
+    }
+  
+</style>
+@model TechMarket.Models.LoginData
+<div class="container-fluid">
+    
+        <div class="row">
+            <div class="col-sm-3"></div>
+            <div class="col-sm-6">
+                @using (Html.BeginForm("Login", "Home", FormMethod.Post, new { @id = "frmLogin" }))
+                {
+                    @Html.AntiForgeryToken()
+
+                    <form>
+                        <div class="login">
+                            <h2>Đăng nhập</h2>
+                            <div class="form-outline mb-4">
+                                <input type="text" name="Username" id="form2Example1" class="form-control" />
+                                <label class="form-label" for="form2Example1">Tên đăng nhập</label>
+                            </div>
+
+                            <div class="form-outline mb-4">
+                                <input type="password" name="Password" id="form2Example2" class="form-control" />
+                                <label class="form-label" for="form2Example2">Mật khẩu</label>
+                            </div>
+                            <label style="color:red">@ViewBag.LoginError</label>
+                            <div class="row mb-4">
+                                <div class="col d-flex justify-content-center">
+                                    <!-- Checkbox -->
+                                    <div class="form-check">
+                                        @Html.CheckBoxFor(m => m.RememberMe)
+                                        <label class="form-check-label" for="form2Example34"> Nhớ mật khẩu </label>
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <!-- Simple link -->
+                                    <a href="~/Home/pass?mk=quenmatkhau">Quên mật khẩu?</a>
+                                </div>
+                            </div>
+                            <center>
+                                <div class="form-group">
+                                    <input type="submit" class="btn btn-primary btn-block mb-4" value="Đăng nhập" />
+                                </div>
+                            </center>
+                        </div>
+                    </form>
+                    }
+                    <div class="text-center">
+                        <p>Chưa có tài khoản? <a href="~/Home/RegisterAccount">Đăng ký</a></p>
+                        <p>Đăng nhập với:</p>
+                        <form action="@Url.Action("LoginWithGooglePlus", "LoginSocial")" method="post">
+                            @Html.AntiForgeryToken()
+                            <button type="submit" class="btn btn-danger"><i class="fa fa-google-plus"></i>  Login with Google + </button>
+                        </form>
+                    </div>
+            </div>
+            <div class="col-sm-3"></div>
+        </div>
+</div>
+

@@ -1,0 +1,174 @@
+﻿
+@{
+    ViewBag.Title = "ShopProfile";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<link href="~/Design/ShopProfile/shopprofile.css" rel="stylesheet" />
+
+@Html.Raw(TempData["msg"])
+<div class="box_content">
+    <img class="img1"
+         src="@Model.shop_background" />
+    <div class="box">
+        <img src="@Model.shop_avatar" />
+    </div>
+</div>
+<div class="h1_content">
+    <h1>@Model.shop_name</h1>
+    <p>(Shop Bán Điện Thoại)</p>
+</div>
+<div class="content_shopp">
+    <div class="c_shop">
+        <h3>Sản Phẩm</h3>
+    </div>
+    @{ 
+        TechMarket.Models.SGDFleaMarketEntities db = new TechMarket.Models.SGDFleaMarketEntities();
+        int idc = int.Parse(User.Identity.Name);
+        int ids = int.Parse(Request.QueryString["id"].ToString());
+        var sd = db.tbl_Shop.Where(x => x.Id == ids && x.id_account == idc);
+            if (sd.Count() == 1)
+            {
+                <div class="c_shop1">
+                    <a href="~/Product/Category?shop=add">Thêm</a>
+                </div>
+            }
+    }
+</div>
+<br />
+
+<div class="row">
+    <div class="col-sm-3" style="border-right:1px solid #808080">
+        <div class="text-tt">
+            <h2>Thông tin</h2>
+        </div>
+
+        <br />
+        <p><i class="fas fa-map-marker-alt"></i> Địa chỉ: @Model.shop_address</p>
+        <br />
+        <p><i class="fas fa-phone-alt"></i> Số điện thoại: @Model.shop_phone</p>
+        <br />
+        <p><i class="far fa-comment-alt"></i> Giới thiệu: @Model.shop_introduce</p>
+        <br />
+
+        @{
+            if (sd.Count() == 1)
+            {
+                int id = int.Parse(User.Identity.Name);
+                var ch = db.tbl_Shop.Where(x => x.id_account == id).FirstOrDefault();
+                if (ch != null)
+                {
+                    <a href="@Url.Action("EditShop", "Shop", new { id = ch.Id })" class="a-tt">Cập nhật thông tin shop</a>
+                }
+            }
+        }
+        <br />
+        <div>
+            <center>
+                <h4>Đánh giá</h4>
+            </center>
+            @{
+                float sao = 0, dem = 0, tongsao = 0;
+                int bien = Model.Id;
+                var tinhsao = db.tbl_Evaluete.Where(x => x.id_shop == bien);
+                foreach (var item in tinhsao)
+                {
+                    sao += (float)item.star;
+                    dem++;
+                }
+                tongsao = (float)sao / dem;
+            }
+
+            <center>
+                @if (tinhsao.Count() == 0)
+                {
+                    <h6>Chưa có đánh giá: <i class="fas fa-star" style="color:gold;"></i></h6>
+                }
+                else
+                {
+                    <h4>@tongsao <i class="fas fa-star" style="color:gold;"></i></h4>
+                }
+
+            </center>
+
+            <center>
+                @using (Html.BeginForm("DanhGia", "Home", FormMethod.Post, new { @id = "frmLogin" }))
+                {
+                    @Html.AntiForgeryToken()
+                    <center>
+                        <input type="text" hidden name="idcus" value="0" />
+                        <input type="text" hidden name="idshop" value="@ids" />
+                        <input type="text" hidden name="loai" value="1" />
+                        <fieldset class="rating">
+                            <input type="radio" id="star5" name="rating" value="5" />
+                            <label class="full" for="star5" title="Awesome - 5 stars"></label>
+
+                            <input type="radio" id="star4" name="rating" value="4" />
+                            <label class="full" for="star4" title="Pretty good - 4 stars"></label>
+
+                            <input type="radio" id="star3" name="rating" value="3" />
+                            <label class="full" for="star3" title="Meh - 3 stars"></label>
+
+                            <input type="radio" id="star2" name="rating" value="2" />
+                            <label class="full" for="star2" title="Kinda bad - 2 stars"></label>
+
+                            <input type="radio" id="star1" name="rating" value="1" />
+                            <label class="full" for="star1" title="Sucks big time - 1 star"></label>
+                        </fieldset>
+
+                        <input type="submit" class="btn btn-outline-success" name="submit" value="Đánh giá" />
+                    </center>
+                }
+            </center>
+        </div>
+
+    </div>
+    <div class="col-sm-9">
+
+        @Html.Partial("_Product")
+
+    </div>
+</div>
+
+<style>
+    .rating {
+        border: none;
+        display:flex;
+        justify-content:center;
+        align-items:center;
+    }
+
+        .rating > input {
+            display: none;
+        }
+
+        .rating > label:before {
+            margin: 5px;
+            font-size: 1.2em;
+            font-family: FontAwesome;
+            display: inline-block;
+            content: "\f005";
+        }
+
+        .rating > .half:before {
+            content: "\f089";
+            position: absolute;
+        }
+
+        .rating > label {
+            color: #ddd;
+            float: right;
+        }
+
+        .rating > input:checked ~ label,
+        .rating:not(:checked) > label:hover,
+        .rating:not(:checked) > label:hover ~ label {
+            color: #ffd700;
+        }
+
+            .rating > input:checked + label:hover,
+            .rating > input:checked ~ label:hover,
+            .rating > label:hover ~ input:checked ~ label,
+            .rating > input:checked ~ label:hover ~ label {
+                color: #ffed85;
+            }
+</style>

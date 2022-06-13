@@ -1,0 +1,201 @@
+﻿
+@{
+    ViewBag.Title = "Push";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<br />
+<h4>Đẩy tin</h4>
+<div class="row">
+    <div class="col-sm-8 card">
+        @using (Html.BeginForm("PushProduct", "Home", FormMethod.Post, new { @id = "frmLogin" }))
+        {
+            @Html.AntiForgeryToken()
+            <h2 class="h2-tt">Chọn gói đẩy tin</h2>
+            <br />
+            <div class="card-pay-f00">
+                <div class="card-pay-f01">
+                    <div class="pay-checked">
+                        @{ 
+                            int idc = int.Parse(Request.QueryString["id"].ToString());
+                            var format = System.Globalization.CultureInfo.GetCultureInfo("vi-VN");
+                         }
+                        <input type="text" hidden="hidden" name="id" value="@idc" />
+                        <input type="radio" value="daytin1" checked id="thanhtoan" name="day" />
+                    </div>
+                    <div class="pay-img">
+                        @{
+                            if (Session["gia1"] != null && Session["gia2"] != null && Session["gia3"] != null)
+                            {
+                                float giane = float.Parse(Session["gia1"].ToString());
+                                string gia = @String.Format(format, "{0:c0}", giane);
+                                <h3 style="padding-top:10px">Đẩy tin 1 ngày (@gia)</h3>
+                            }
+                        }
+                    </div>
+                </div>
+                <div class="card-pay-f01">
+                    <div class="pay-checked">
+                        <input type="radio" value="daytin2" id="thanhtoan" name="day" />
+                    </div>
+                    <div class="pay-img">
+                        @{
+                            if (Session["gia1"] != null && Session["gia2"] != null && Session["gia3"] != null)
+                            {
+                                float giane = float.Parse(Session["gia2"].ToString());
+                                string gia = @String.Format(format, "{0:c0}", giane);
+                                <h3 style="padding-top:10px">Đẩy tin 3 ngày (@gia)</h3>
+                            }
+                        }
+                    </div>
+                </div>
+                <div class="card-pay-f01">
+                    <div class="pay-checked">
+                        <input type="radio" value="daytin3" id="thanhtoan" name="day" />
+                    </div>
+                    <div class="pay-img">
+                        @{
+                            if (Session["gia1"] != null && Session["gia2"] != null && Session["gia3"] != null)
+                            {
+                                float giane = float.Parse(Session["gia3"].ToString());
+                                string gia = @String.Format(format, "{0:c0}", giane);
+                                <h3 style="padding-top:10px">Đẩy tin 7 ngày (@gia)</h3>
+                            }
+                        }
+                    </div>
+                </div>
+            </div><br />
+            <center>
+                <input type="submit" class="btn btn-warning" style="margin: auto; width: 50%;" value="Thanh toán ngay" />
+            </center><br /><br />
+        }
+    </div>
+    <div class="col-sm-4">
+        @Html.Partial("_pay")
+    </div>
+</div>
+
+@*<a href="@Url.Action("PushProduct","Home", new { id = idc, gia = -5000, ngay = 1 })">Đẩy tin 1 ngày (5.000 VNĐ)</a>
+<a href="@Url.Action("PushProduct","Home", new { id = idc, gia = -15000, ngay = 3 })">Đẩy tin 3 ngày (15.000 VNĐ)</a>
+<a href="@Url.Action("PushProduct","Home", new { id = idc, gia = -30000, ngay = 7 })">Đẩy tin 7 ngày (30.000 VNĐ)</a>*@
+
+<style>
+    .card-pay-ground {
+        width: 80%;
+        margin: auto;
+        box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+        border-radius: 8px;
+    }
+
+    .card-pay-a00 {
+        width: 70%;
+        margin: auto;
+        height: 150px;
+        border: 1px solid #ccc;
+        margin-top: 15px;
+        margin-bottom: 15px;
+    }
+
+    .card-pay-title h2 {
+        font-size: 20px;
+        padding-left: 15px;
+    }
+
+    .card-pay-money {
+        display: flex;
+    }
+
+    .card-pay-image {
+        width: 100px;
+        height: 100px;
+        margin-left: 15px;
+        border: 1px solid #ccc;
+    }
+
+        .card-pay-image img {
+            width: 100%;
+            height: 100%;
+        }
+
+    .card-pay-content {
+        margin-left: 25px;
+    }
+
+        .card-pay-content h1 {
+            font-size: 18px;
+        }
+
+        .card-pay-content p {
+            font-size: 15px;
+            margin-bottom: -5px;
+        }
+
+    .card-tt {
+        display: flex;
+        justify-content: space-between;
+        width: 70%;
+        margin: auto;
+        border-top: 1px solid #ccc;
+        border-bottom: 1px solid #ccc;
+    }
+
+        .card-tt h2 {
+            font-size: 20px;
+        }
+
+        .card-tt span {
+            color: red;
+            font-weight: 600;
+        }
+
+    .h2-tt {
+        font-size: 20px;
+        font-weight: 600;
+        padding-top: 15px;
+        padding-left: 153px;
+    }
+
+    .card-pay-f00 {
+        width: 70%;
+        margin: auto;
+    }
+
+    .card-pay-f01 {
+        width: 100%;
+        height: 80px;
+        display: flex;
+        transition: 0.2s all ease-in-out;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+        margin-bottom: 15px;
+    }
+
+        .card-pay-f01:hover {
+            box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+            border-radius: 5px;
+            border: none;
+        }
+
+    .pay-img {
+        display: flex;
+        flex-direction: column;
+    }
+
+    .pay-checked {
+        margin-right: 1rem;
+    }
+
+        .pay-checked input {
+            margin-top: 15px;
+            margin-left: 25px;
+        }
+
+    .pay-img h3 {
+        font-size: 18px;
+        padding-top: 5px;
+    }
+
+    .pay-img img {
+        width: 30px;
+        height: 30px;
+    }
+</style>

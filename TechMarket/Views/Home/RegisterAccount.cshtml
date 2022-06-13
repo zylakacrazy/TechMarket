@@ -1,0 +1,127 @@
+﻿@model TechMarket.Models.tbl_Account
+
+@{
+    ViewBag.Title = "RegisterAccount";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    .col-sm-6 {
+        box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+        border-radius: 8px;
+        margin: auto;
+        margin-top: 1rem;
+        width: 35%;
+    }
+    .col-sm-6 h6{
+        font-size: 25px;
+        text-align: center;
+        padding-top: 25px;
+    }
+    .dk-c00 {
+        width: 40%;
+        margin: auto;
+    }
+    .form-group {
+      width: 90%;
+      margin: auto;
+    }
+</style>
+<div class="row">
+    <div class="col-sm-3">
+    </div>
+    <div class="col-sm-6">
+        @using (Html.BeginForm())
+        {
+            @Html.AntiForgeryToken()
+            <h6>Đăng ký tài khoản</h6>
+            <br />
+            <div class="form-horizontal">
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                <div class="form-group">
+                    <div class="form-outline mb-4">
+                        @Html.EditorFor(model => model.username, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.Label("username", "Tên đăng nhập", htmlAttributes: new { @class = "form-label" })
+                        @Html.ValidationMessageFor(model => model.username, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="form-outline mb-4">
+                        @Html.PasswordFor(model => model.password, new { @class = "form-control" })
+                        @Html.Label("password", "Mật khẩu", htmlAttributes: new { @class = "form-label" })
+                        @Html.ValidationMessageFor(model => model.password, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="form-outline mb-4">
+                        <input type="password" name="passwordnl" value="" class="form-control" />
+                        @Html.Label("passwordnl", "Nhập lại mật khẩu", htmlAttributes: new { @class = "form-label" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="form-outline mb-4">
+                        @Html.EditorFor(model => model.fullname, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.Label("fullname", "Tên người dùng", htmlAttributes: new { @class = "form-label" })
+                        @Html.ValidationMessageFor(model => model.fullname, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="form-outline mb-4">
+                        @Html.EditorFor(model => model.phone, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.Label("phone", "Số điện thoại", htmlAttributes: new { @class = "form-label", onkeydown = "return ValidateNumber(event);" })
+                        @Html.ValidationMessageFor(model => model.phone, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <div class="form-group">
+                    @Html.Label("Giới tính", htmlAttributes: new { @class = "control-label" })
+                    <div class="form-outline mb-4">
+                        @Html.RadioButton("Gender", "0")
+                        <label class="control-label">Nam</label>&nbsp;&nbsp;
+                        @Html.RadioButton("Gender", "1")
+                        <label class="control-label">Nữ</label>&nbsp;&nbsp;
+                        @Html.RadioButton("Gender", "2")
+                        <label class="control-label">Khác</label>
+                        @Html.ValidationMessageFor(model => model.gender, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                @Html.HiddenFor(model => model.Role, new { Value = 1 })
+                <center>
+                    <div class="form-group">
+                        <input type="submit" class="btn btn-primary btn-block mb-4 dk-c00" value="Đăng ký" />
+                    </div>
+                </center>
+            </div>
+        }
+    <div class="text-center">
+        <p>Chưa có tài khoản? <a href="~/Home/Login">Đăng ký</a></p>
+        <p>Đăng nhập với:</p>
+        <form action="@Url.Action("LoginWithGooglePlus", "LoginSocial")" method="post">
+            @Html.AntiForgeryToken()
+            <button type="submit" class="btn btn-danger" style="margin-bottom: 1rem;"><i class="fa fa-google-plus"></i>  Login with Google + </button>
+        </form>
+        @*<button type="button" class="btn btn-primary btn-floating mx-1">
+            <i class="fab fa-google"></i>
+        </button>
+        <button type="button" class="btn btn-primary btn-floating mx-1">
+            <i class="fab fa-facebook-f"></i>
+        </button>
+        <button type="button" class="btn btn-primary btn-floating mx-1">
+            <i class="fab fa-twitter"></i>
+        </button>
+        <button type="button" class="btn btn-primary btn-floating mx-1">
+            <i class="fab fa-github"></i>
+        </button>*@
+    </div>
+    </div>
+    <div class="col-sm-3">
+    </div>
+</div>
+<script>
+    function ValidateNumber(e) {
+        var evt = (e) ? e : window.event;
+        var charCode = (evt.keyCode) ? evt.keyCode : evt.which;
+        if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+            return false;
+        }
+        return true;
+    };
+</script>

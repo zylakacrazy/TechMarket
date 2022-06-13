@@ -1,0 +1,321 @@
+﻿@model TechMarket.Models.tbl_Account
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    .form-horizontal {
+        width: 70%;
+        margin: auto;
+        box-shadow: rgba(149, 157, 165, 0.2) 0px 8px 24px;
+        border-radius: 15px;
+    }
+    .frm-fgh {
+        width: 80%;
+        margin: auto;
+    }
+    /* You can remove these code below*/
+    input, button, textarea {
+        border: 0;
+        outline: none;
+    }
+    /* Main code */
+
+    .input-file {
+        margin: 0 auto;
+        width: 80%;
+        height: 150px;
+        border-style: dashed;
+        position: relative;
+        border-radius: 5px;
+    }
+
+    .input-label {
+        border-radius: 8px;
+        border: 1px dotted #eee;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        z-index: 2;
+        cursor: pointer;
+    }
+
+    .input-file input[type="file"] {
+        display: none;
+    }
+
+    .input-file .icon-upload {
+        color: #ccc;
+        font-size: 3rem;
+        pointer-events: none;
+    }
+    .frm-gt {
+        padding-top: 15px;
+        padding-left: 85px;
+    }
+    .frm-fgh1 {
+        display: flex;
+        flex-direction: column;
+    }
+    .frm-fgh1 select{
+        width: 80%;
+        margin: auto;
+        height: 35px;
+        margin-bottom: 15px;
+        border-radius: 5px;
+        border: 1px solid #ccc;
+    }
+    .frm-fgh1 select:focus{
+        border: 2px solid #0066ff;
+    }
+    .sve {
+        width: 180px;
+        height: 40px;
+        background: #0066ff;
+        margin: auto;
+        color: #fff;
+        margin-bottom: 15px;
+    }
+    .gty {
+        display: flex;
+        justify-content: center;
+    }
+    .back-list {
+        margin-left: 12rem;
+    }
+</style>
+<br />
+<h2 style="padding-left: 12rem;">Cập nhật thông tin cá nhân</h2>
+
+@using (Html.BeginForm("editP", "Home", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+
+<div class="form-horizontal">
+    <hr />
+    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+    @Html.HiddenFor(model => model.Id)
+    <br />
+    <div class="form-group">
+        <div class="form-outline mb-4 frm-fgh">
+            @Html.EditorFor(model => model.username, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+            <label class="form-label" for="username">Tên đăng nhập</label>
+            @Html.ValidationMessageFor(model => model.username, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="form-outline mb-4 frm-fgh">
+            @Html.EditorFor(model => model.fullname, new { htmlAttributes = new { @class = "form-control" } })
+            <label class="form-label" for="fullname">Họ và tên</label>
+            @Html.ValidationMessageFor(model => model.fullname, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+
+
+    <div class="form-group">
+        <div class="form-outline mb-4 frm-fgh">
+            @Html.EditorFor(model => model.phone, new { htmlAttributes = new { @class = "form-control", onkeydown = "return ValidateNumber(event);" } })
+            <label class="form-label" for="phone">Số điện thoại</label>
+            @Html.ValidationMessageFor(model => model.phone, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="form-outline mb-4 frm-fgh">
+            @Html.EditorFor(model => model.email, new { htmlAttributes = new { @class = "form-control", @type = "email" } })
+            <label class="form-label" for="email">Mail</label>
+            @Html.ValidationMessageFor(model => model.email, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="form-outline mb-4 frm-fgh">
+            @Html.EditorFor(model => model.facebook, new { htmlAttributes = new { @class = "form-control",@type="url" } })
+            <label class="form-label" for="facebook">Facebook</label>
+            @Html.ValidationMessageFor(model => model.facebook, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+
+
+    <div class="form-group">
+        <div class="form-outline mb-4 frm-fgh">
+            @Html.EditorFor(model => model.cmnd, new { htmlAttributes = new { @class = "form-control", onkeydown = "return ValidateNumber(event);" } })
+            <label class="form-label" for="cmnd">CMND/CCCD</label>
+            @Html.ValidationMessageFor(model => model.cmnd, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="form-outline mb-4 frm-fgh">
+            <input type="date" name="brithday" class="form-control" id="brithday" value="" />
+            <label class="form-label" for="brithday">Ngày sinh</label>
+            @*@Html.EditorFor(model => model.brithday, new { htmlAttributes = new { @class = "form-control" } })*@
+
+            @Html.ValidationMessageFor(model => model.brithday, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+
+    <div class="form-group">
+        <label style="padding-left: 90px; padding-bottom: 15px;">Địa chỉ</label>
+        <div class="frm-fgh1">
+            <select name="calc_shipping_provinces" required="">
+                <option value="">Tỉnh / Thành phố</option>
+            </select>
+            <select name="calc_shipping_district" required="">
+                <option value="">Quận / Huyện</option>
+            </select>
+            <input class="billing_address_1" name="address" type="hidden" value="">
+            <input class="billing_address_2" name="diachi" type="hidden" value="">
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="form-outline mb-4 frm-fgh">
+            <a href="~/Home/pass?mk=1" class="btn btn-outline-dark btn-block">Thay đổi mật khẩu</a>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="form-outline mb-4 frm-fgh">
+            <a href="~/Home/pass?mk=2" class="btn btn-outline-dark btn-block">Cài đặt mật khẩu cấp 2</a>
+        </div>
+    </div>
+
+    <div class="input-file">
+        <input type="file" name="images" id="file" value="@Model.images" />
+        @Html.ValidationMessageFor(model => model.images, "", new { @class = "text-danger" })
+        <label for="file" class="input-label">
+            <i class="fas fa-cloud-upload-alt icon-upload"></i>
+            Chọn ảnh upload
+        </label>
+    </div>
+    <!--end------>
+    <div class="form-group frm-gt">
+        <label class="form-label" for="">Giới tính</label>
+        <div class="form-outline mb-4">
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="gender" id="inlineRadio1" value="0" checked />
+                <label class="form-check-label" for="inlineRadio1">Nam</label>
+            </div>
+
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="gender" id="inlineRadio2" value="1" />
+                <label class="form-check-label" for="inlineRadio2">Nữ</label>
+            </div>
+
+            <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="gender" id="inlineRadio3" value="3" />
+                <label class="form-check-label" for="inlineRadio3">Khác</label>
+            </div>
+            @Html.ValidationMessageFor(model => model.gender, "", new { @class = "text-danger" })
+        </div>
+    </div>
+
+    <div class="form-group">
+        <div class="col-md-offset-2 form-outline mb-4 gty">
+            <input type="submit" value="Save" class="btn btn-default sve" />
+        </div>
+    </div>
+</div>
+        }
+
+<div class="back-list">
+    <i class="fas fa-chevron-left"></i>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+<script src='https://cdn.jsdelivr.net/gh/vietblogdao/js/districts.min.js'></script>
+
+<script>
+    //<![CDATA[
+    if (address_2 = localStorage.getItem('address_2_saved')) {
+        $('select[name="calc_shipping_district"] option').each(function () {
+            if ($(this).text() == address_2) {
+                $(this).attr('selected', '')
+            }
+        })
+        $('input.billing_address_2').attr('value', address_2)
+    }
+    if (district = localStorage.getItem('district')) {
+        $('select[name="calc_shipping_district"]').html(district)
+        $('select[name="calc_shipping_district"]').on('change', function () {
+            var target = $(this).children('option:selected')
+            target.attr('selected', '')
+            $('select[name="calc_shipping_district"] option').not(target).removeAttr('selected')
+            address_2 = target.text()
+            $('input.billing_address_2').attr('value', address_2)
+            district = $('select[name="calc_shipping_district"]').html()
+            localStorage.setItem('district', district)
+            localStorage.setItem('address_2_saved', address_2)
+        })
+    }
+    $('select[name="calc_shipping_provinces"]').each(function () {
+        var $this = $(this),
+            stc = ''
+        c.forEach(function (i, e) {
+            e += +1
+            stc += '<option value=' + e + '>' + i + '</option>'
+            $this.html('<option value="">Tỉnh / Thành phố</option>' + stc)
+            if (address_1 = localStorage.getItem('address_1_saved')) {
+                $('select[name="calc_shipping_provinces"] option').each(function () {
+                    if ($(this).text() == address_1) {
+                        $(this).attr('selected', '')
+                    }
+                })
+                $('input.billing_address_1').attr('value', address_1)
+            }
+            $this.on('change', function (i) {
+                i = $this.children('option:selected').index() - 1
+                var str = '',
+                    r = $this.val()
+                if (r != '') {
+                    arr[i].forEach(function (el) {
+                        str += '<option value="' + el + '">' + el + '</option>'
+                        $('select[name="calc_shipping_district"]').html('<option value="">Quận / Huyện</option>' + str)
+                    })
+                    var address_1 = $this.children('option:selected').text()
+                    var district = $('select[name="calc_shipping_district"]').html()
+                    localStorage.setItem('address_1_saved', address_1)
+                    localStorage.setItem('district', district)
+                    $('select[name="calc_shipping_district"]').on('change', function () {
+                        var target = $(this).children('option:selected')
+                        target.attr('selected', '')
+                        $('select[name="calc_shipping_district"] option').not(target).removeAttr('selected')
+                        var address_2 = target.text()
+                        $('input.billing_address_2').attr('value', address_2)
+                        district = $('select[name="calc_shipping_district"]').html()
+                        localStorage.setItem('district', district)
+                        localStorage.setItem('address_2_saved', address_2)
+                    })
+                } else {
+                    $('select[name="calc_shipping_district"]').html('<option value="">Quận / Huyện</option>')
+                    district = $('select[name="calc_shipping_district"]').html()
+                    localStorage.setItem('district', district)
+                    localStorage.removeItem('address_1_saved', address_1)
+                }
+            })
+        })
+    })
+//]]></script>
+
+<script>
+    function ValidateNumber(e) {
+        var evt = (e) ? e : window.event;
+        var charCode = (evt.keyCode) ? evt.keyCode : evt.which;
+        if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+            return false;
+        }
+        return true;
+    };
+</script>

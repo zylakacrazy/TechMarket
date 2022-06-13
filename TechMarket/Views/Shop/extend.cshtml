@@ -1,0 +1,48 @@
+﻿
+@{
+    ViewBag.Title = "extend";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row">
+    <div class="col-sm-1"></div>
+    <div class="col-sm-7">
+        <br />
+        <h4>Gia hạn cửa hàng</h4>
+        <div class="card">
+            <div class="card-body">
+                @{ 
+                    var format = System.Globalization.CultureInfo.GetCultureInfo("vi-VN");
+                    float a1 = Math.Abs(float.Parse(Session["giahang10ngay"].ToString()));
+                    float b1 = Math.Abs(float.Parse(Session["giahang30ngay"].ToString()));
+                    float c1 = Math.Abs(float.Parse(Session["giahang6thang"].ToString()));
+                    float d1 = Math.Abs(float.Parse(Session["giahang1nam"].ToString()));
+                    float e1 = Math.Abs(float.Parse(Session["giahang5nam"].ToString()));
+                    string gia1 = String.Format(format, "{0:c0}", a1);
+                    string gia2 = String.Format(format, "{0:c0}", b1);
+                    string gia3 = String.Format(format, "{0:c0}", c1);
+                    string gia4 = String.Format(format, "{0:c0}", d1);
+                    string gia5 = String.Format(format, "{0:c0}", e1);
+                }
+                <a class="btn btn-block btn2 btn-outline-success" href="@Url.Action("GiaHan", new { gia = float.Parse(Session["giahang10ngay"].ToString()), ngay = 10, thang = 0, nam = 0 })">gia hạn 10 ngày, Giá @gia1</a>
+                <a class="btn btn-block btn2 btn-outline-success" href="@Url.Action("GiaHan", new { gia = float.Parse(Session["giahang30ngay"].ToString()), ngay = 0, thang = 1, nam =0 })">gia hạn 30 ngày, Giá @gia2</a>
+                <a class="btn btn-block btn2 btn-outline-success" href="@Url.Action("GiaHan", new { gia = float.Parse(Session["giahang6thang"].ToString()), ngay = 0, thang = 6, nam =0 })">gia hạn 6 tháng, Giá @gia3</a>
+                <a class="btn btn-block btn2 btn-outline-success" href="@Url.Action("GiaHan", new { gia = float.Parse(Session["giahang1nam"].ToString()), ngay = 0, thang = 0, nam =1 })">gia hạn 1 năm, Giá @gia4</a>
+                <a class="btn btn-block btn2 btn-outline-success" href="@Url.Action("GiaHan", new { gia = float.Parse(Session["giahang5nam"].ToString()), ngay = 0, thang = 0, nam =5 })">gia hạn 5 năm, Giá @gia5</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-3">
+        <br />
+        @Html.Partial("_pay")
+    </div>
+    <div class="col-sm-1"></div>
+</div>
+
+<style>
+    .btn2 {
+        margin-top: 20px;
+        padding: 12px;
+        font-size:14px;
+    }
+</style>

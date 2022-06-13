@@ -1,0 +1,78 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+
+
+}
+<style>
+    .cach {
+        width: 100%;
+        color:#696c6d
+    }
+</style>
+<br />
+
+
+<div class="row">
+    <div class="col-sm-3">
+        <div class="card" style="padding:20px">
+            <center>
+                <h5>Trợ giúp</h5>
+            </center><br />
+            <a class="cach" href="?tro-giup=1">Chính sách bảo vệ khách hàng</a><br />
+            <a class="cach" href="?tro-giup=2">Mẹo mua hàng an toàn</a><br />
+            <a class="cach" href="?tro-giup=3">Mẹo khi mua điện thoại</a><br />
+            <a class="cach" href="?tro-giup=4">Các trường hợp lừa đảo phổ biến cần cảnh giác</a><br />
+        </div>
+    </div>
+    <div class="col-sm-9">
+        @if (Request.QueryString["tro-giup"].ToString() == "1")
+        {
+            @Html.Partial("_chinhsach")
+        }
+        else if (Request.QueryString["tro-giup"].ToString() == "2")
+        {
+            @Html.Partial("_meomuahangantoan")
+        }
+        else if (Request.QueryString["tro-giup"].ToString() == "3")
+        {
+            @Html.Partial("_meomuadienthoai")
+        }
+        else
+        {
+            @Html.Partial("_luadao")
+        }
+
+    </div>
+</div>
+<!-- Messenger Plugin chat Code -->
+<div id="fb-root"></div>
+
+<!-- Your Plugin chat code -->
+<div id="fb-customer-chat" class="fb-customerchat">
+</div>
+
+<script>
+      var chatbox = document.getElementById('fb-customer-chat');
+      chatbox.setAttribute("page_id", "103763525049277");
+      chatbox.setAttribute("attribution", "biz_inbox");
+</script>
+
+<!-- Your SDK code -->
+<script>
+      window.fbAsyncInit = function() {
+        FB.init({
+          xfbml            : true,
+          version          : 'v12.0'
+        });
+      };
+
+      (function(d, s, id) {
+        var js, fjs = d.getElementsByTagName(s)[0];
+        if (d.getElementById(id)) return;
+        js = d.createElement(s); js.id = id;
+        js.src = 'https://connect.facebook.net/vi_VN/sdk/xfbml.customerchat.js';
+        fjs.parentNode.insertBefore(js, fjs);
+      }(document, 'script', 'facebook-jssdk'));
+</script>

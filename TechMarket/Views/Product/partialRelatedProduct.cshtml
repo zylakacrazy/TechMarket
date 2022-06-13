@@ -1,0 +1,43 @@
+﻿<div class="product_groud">
+    @{
+        TechMarket.Models.SGDFleaMarketEntities db = new TechMarket.Models.SGDFleaMarketEntities();
+        int idcust = int.Parse(ViewData["idcus"].ToString());
+    }
+    @foreach (var item in db.tbl_Product.Where(x=>x.id_account == idcust&& x.status == 1).ToList())
+    {
+        <div class="product">
+            <div class="pr_img">
+                <a href="@Url.Action("showDetails","Product", new {id = item.Id })">
+                    <img src=@Url.Content("~/Images/Product/"+item.product_images) alt="" />
+                </a>
+            </div>
+            <div class="pr_text">
+                @{
+                    var cusname = db.tbl_Account.Find(item.id_account);
+                    string name = cusname.fullname;
+                }
+                <p>Người bán: @name</p>
+                <h3>@item.product_title</h3>
+                @{
+                    var format = System.Globalization.CultureInfo.GetCultureInfo("vi-VN");
+                }
+                <h5 style="color:red;">@String.Format(format, "{0:c0}", item.product_price)</h5>
+                <div class="txt_bottom">
+                    <p><i class="bx bxs-map"></i> VietNam</p>
+                    <p class="p1">Như mới</p>
+                    @*<p>
+                @{
+                    int a = int.Parse(item.id_device.ToString());
+                    var b = db.tbl_Device.ToList().FirstOrDefault(x => x.Id == a);
+                    int gt = int.Parse(b.id_typedevice.ToString());
+                }
+                <a href="@Url.Action("UpdateProduct","Product", new { idsp = item.Id })&id=@gt">Sửa</a>
+                <a href="~/Product/DeleteProduct?idsp=@item.Id">Xóa</a>
+            </p>*@
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+

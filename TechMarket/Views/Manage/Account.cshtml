@@ -1,0 +1,114 @@
+﻿
+@{
+    ViewBag.Title = "Account";
+    Layout = "~/Views/Shared/_Template.cshtml";
+}
+<b>Quản lý tài khoản</b>
+@(Html.DevExtreme().DataGrid<TechMarket.Models.tbl_Account>()
+    .ID("gridContainer")
+    .Scrolling(scrolling => scrolling.RowRenderingMode(GridRowRenderingMode.Virtual))
+    .Paging(paging => paging.PageSize(10))
+    .Pager(pager =>
+    {
+        pager.Visible(true);
+        pager.DisplayMode(GridPagerDisplayMode.Full);
+        pager.ShowPageSizeSelector(true);
+        pager.AllowedPageSizes(new JS("[5, 10, 'all']"));
+        pager.ShowInfo(true);
+        pager.ShowNavigationButtons(true);
+    })
+    .SearchPanel(s => s
+        .Visible(true)
+        .HighlightCaseSensitive(true)
+    )
+    .HeaderFilter(headerFilter => headerFilter.Visible(true))
+    .DataSource(ds => ds.WebApi()
+        .RouteName("tbl_AccountApi")
+        .LoadAction("Get")
+        .InsertAction("Post")
+        .UpdateAction("Put")
+        .DeleteAction("Delete")
+        .Key("Id")
+    )
+    .RemoteOperations(true)
+    .Columns(columns => {
+
+    //columns.AddFor(m => m.Id);
+    columns.Add().Caption("TT").CellTemplate(new JS("SoThuTu")).Width(50);
+    columns.AddFor(m => m.images).Caption("Hình ảnh")
+        .Width(100)
+            .AllowFiltering(false)
+            .AllowSorting(false)
+            .CellTemplate(@<text>
+                <div>
+                    <img id="hinhne" src="<%- value %>" alt=""/>
+                </div>
+            </text>);
+        columns.AddFor(m => m.fullname).Caption("Tên người dùng").Width(150);
+        columns.AddFor(m => m.gender).Caption("Giới tính")
+        .Lookup(lockup => lockup
+                .DataSource(new JS("gt"))
+                .DisplayExpr("name")
+                .ValueExpr("idgt"));
+        columns.AddFor(m => m.cmnd).Caption("CMND/CCCD");
+        columns.AddFor(m => m.username).Caption("Tên tài khoản").Width(100);
+        columns.AddFor(m => m.password).Caption("Mật khẩu").Width(100);
+        columns.AddFor(m => m.password_v2).Caption("Mật khẩu cấp 2").Width(100);
+        columns.AddFor(m => m.brithday).Caption("Ngày sinh");
+        columns.AddFor(m => m.phone).Caption("Số điện thoại");
+        columns.AddFor(m => m.email).Caption("Email");
+        columns.AddFor(m => m.facebook).Caption("Facebook").Width(100);
+        columns.AddFor(m => m.address).Caption("Địa chỉ").Width(200);
+    })
+    .ColumnAutoWidth(true)
+    .ShowBorders(true)
+    .Editing(e => e.Mode(GridEditMode.Popup).UseIcons(true)
+        .AllowAdding(true)
+        .AllowUpdating(true)
+        .AllowDeleting(true)
+        .Popup(p => p
+                .Title("Thông tin tài khoản")
+                .ShowTitle(true)
+                .Width(700)
+                .Height(525)
+            )
+        .Form(f => f.Items(items =>
+        {
+            items.AddGroup().ColCount(2)
+                        .ColSpan(2)
+                .Items(groupItems =>
+                {
+                    groupItems.AddSimpleFor(m => m.username);
+                    groupItems.AddSimpleFor(m => m.password);
+                    groupItems.AddSimpleFor(m => m.phone);
+                    groupItems.AddSimpleFor(m => m.fullname);
+                    groupItems.AddSimpleFor(m => m.facebook);
+                    groupItems.AddSimpleFor(m => m.email);
+                    groupItems.AddSimpleFor(m => m.cmnd);
+                    groupItems.AddSimpleFor(m => m.brithday);
+                    groupItems.AddSimpleFor(m => m.address);
+                    groupItems.AddSimpleFor(m => m.gender);
+                });
+        })
+        )
+    )
+)
+
+<style>
+    img#hinhne {
+        height: 60px;
+        display: block;
+    }
+
+    #gridContainer {
+        height: 450px;
+    }
+</style>
+<script>
+    var gt = [
+        { idgt: "0", name: "Nam" },
+        { idgt: "1", name: "Nữ" },
+        { idgt: "3", name: "Khác" }
+    ];
+    var formatDate = new Intl.DateTimeFormat("en-US").format;
+</script>

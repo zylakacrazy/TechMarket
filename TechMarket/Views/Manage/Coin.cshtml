@@ -1,0 +1,66 @@
+﻿
+@{
+    ViewBag.Title = "Coin";
+    Layout = "~/Views/Shared/_Template.cshtml";
+}
+
+<h2>Coin</h2>
+
+@(Html.DevExtreme().DataGrid<TechMarket.Models.tbl_Coin>()
+    .DataSource(ds => ds.WebApi()
+        .RouteName("tbl_CoinApi")
+        .LoadAction("Get")
+        .InsertAction("Post")
+        .UpdateAction("Put")
+        .DeleteAction("Delete")
+        .Key("Id")
+    )
+    .Scrolling(scrolling => scrolling.RowRenderingMode(GridRowRenderingMode.Virtual))
+    .Paging(paging => paging.PageSize(10))
+    .Pager(pager =>
+    {
+        pager.Visible(true);
+        pager.DisplayMode(GridPagerDisplayMode.Full);
+        pager.ShowPageSizeSelector(true);
+        pager.AllowedPageSizes(new JS("[5, 10, 'all']"));
+        pager.ShowInfo(true);
+        pager.ShowNavigationButtons(true);
+    })
+    .SearchPanel(s => s
+        .Visible(true)
+        .HighlightCaseSensitive(true)
+    )
+    .HeaderFilter(headerFilter => headerFilter.Visible(true))
+    .RemoteOperations(true)
+    .Columns(columns => {
+
+        //columns.AddFor(m => m.Id);
+        columns.Add().Caption("TT").CellTemplate(new JS("SoThuTu")).Width(50);
+
+        columns.AddFor(m => m.coin_total).Caption("Xu");
+
+        columns.AddFor(m => m.coin_date).Caption("Ngày nạp");
+
+        columns.AddFor(m => m.coin_details).Caption("Chi tiết");
+
+        columns.AddFor(m => m.id_account).Caption("Người nạp")
+        .Lookup(lockup=>lockup
+            .DataSource(d=>d.WebApi().LoadAction("Get")
+            .RouteName("tbl_AccountApi")
+            .Key("Id"))
+            .DisplayExpr("fullname").ValueExpr("Id")
+            );
+    })
+    .ShowBorders(true)
+    .Editing(e => e.Mode(GridEditMode.Popup).UseIcons(true)
+        .AllowAdding(true)
+        .AllowUpdating(true)
+        .AllowDeleting(true)
+        .Popup(p => p
+                .Title("Thông tin màu sắc")
+                .ShowTitle(true)
+                .Width(700)
+                .Height(525)
+            )
+    )
+)

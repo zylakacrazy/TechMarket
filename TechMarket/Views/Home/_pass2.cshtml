@@ -1,0 +1,42 @@
+﻿<br />
+<div class="row">
+    <div class="col-sm-3"></div>
+    <div class="col-sm-6">
+        <div class="card">
+            <div class="container">
+                <center>
+                    <h5>Tạo mật khẩu cấp 2</h5>
+                </center>
+                @using (Html.BeginForm("MatKhauHai", "Home", FormMethod.Post, new { @id = "frmLogin" }))
+                {
+                    <div class="form-group">
+                        <div class="form-outline mb-4 frm-fgh">
+                            <input type="password" class="form-control" name="matkhauht" value="" />
+                            <label class="form-label" for="matkhauht">Nhập mật khẩu cấp 1 hiện tại</label>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <div class="form-outline mb-4 frm-fgh">
+                            <input type="password" class="form-control" name="matkhau2" value="" />
+                            <label class="form-label" for="matkhauht">Nhập mật khẩu cấp 2</label>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="form-outline mb-4 frm-fgh">
+                            <input type="password" class="form-control" name="matkhaunl2" value="" />
+                            <label class="form-label" for="matkhaum">Nhập lại khẩu cấp 2</label>
+                        </div>
+                    </div>
+
+                    <center>
+                        <input type="submit" class="btn btn-success" name="submit" value="Tạo mật khẩu cấp 2" />
+                    </center>
+                    <br />
+                }
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-3"></div>
+</div>

@@ -1,0 +1,150 @@
+﻿
+@{
+    ViewBag.Title = "Report";
+    Layout = "~/Views/Shared/_Template.cshtml";
+}
+<style>
+    .product {
+        height: 400px;
+    }
+
+    .ulatroi {
+        word-break: break-word;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        display: -webkit-box;
+        line-height: 16px; /* fallback */
+        max-height: 32px; /* fallback */
+        -webkit-line-clamp: 1; /* number of lines to show */
+        -webkit-box-orient: vertical;
+    }
+
+    .p-hot {
+        width: 100px;
+        height: 20px;
+        background: red;
+        color: #fff !important;
+        border-top-right-radius: 5px;
+        border-bottom-right-radius: 5px;
+    }
+</style>
+<h2>Tin bị báo cáo</h2>
+
+<div class="product_groud">
+    @{
+        TechMarket.Models.SGDFleaMarketEntities db = new TechMarket.Models.SGDFleaMarketEntities();
+        int idcs = int.Parse(User.Identity.Name);
+        var result = db.tbl_Product.ToList();
+        var re = db.tbl_Report.ToList();
+        if (re.Count() == 0)
+        {
+            <p>Hiện chưa có tin nào bị báo cáo</p>
+        }
+        else
+        {
+            foreach (var so in re)
+            {
+                foreach (var item in result)
+                {
+                    if (item.Id == so.id_product)
+                    {
+                        <div class="product">
+                            <div class="pr_img">
+                                <a href="@Url.Action("showDetails","Product", new {id = item.Id })">
+                                    <img src=@Url.Content("~/Images/Product/"+item.product_images) alt="" />
+                                </a>
+                            </div>
+                            <div class="pr_text">
+                                @{
+                                    var cusname = db.tbl_Account.Find(item.id_account);
+                                    string name = cusname.fullname;
+                                }
+                                <p>Người bán: @name</p>
+                                <h3 class="ulatroi">@item.product_title</h3>
+                                @{
+                                    var format = System.Globalization.CultureInfo.GetCultureInfo("vi-VN");
+                                }
+                                <h5 style="color:red;">@String.Format(format, "{0:c0}", item.product_price)</h5>
+                                <div class="txt_bottom">
+                                    @{
+                                        int a = int.Parse(item.id_device.ToString());
+                                        var b = db.tbl_Device.FirstOrDefault(x => x.Id == a);
+                                        int gt = int.Parse(b.id_typedevice.ToString());
+                                                                }
+                                                                <a class="p1" href="@Url.Action("BoQua","Manage", new { id = so.Id })">Bỏ qua</a>
+                                                                <a class="p1" href="@Url.Action("UpdateProduct","Product", new { idsp = item.Id })&id=@gt">Sửa tin</a>
+                                                                <p>
+
+                                                                    <a class="p1" href="~/Product/DeleteProduct?idsp=@item.Id">Xóa tin</a>
+                                                                </p>
+                                                            </div>
+                            </div>
+                        </div>
+                    }
+                }
+            }
+        }
+    }
+</div>
+@*@(Html.DevExtreme().DataGrid<TechMarket.Models.tbl_Report>()
+    .DataSource(ds => ds.WebApi()
+        .RouteName("tbl_ReportApi")
+        .LoadAction("Get")
+        .InsertAction("Post")
+        .UpdateAction("Put")
+        .DeleteAction("Delete")
+        .Key("Id")
+    )
+    .Scrolling(scrolling => scrolling.RowRenderingMode(GridRowRenderingMode.Virtual))
+    .Paging(paging => paging.PageSize(10))
+    .Pager(pager =>
+    {
+        pager.Visible(true);
+        pager.DisplayMode(GridPagerDisplayMode.Full);
+        pager.ShowPageSizeSelector(true);
+        pager.AllowedPageSizes(new JS("[5, 10, 'all']"));
+        pager.ShowInfo(true);
+        pager.ShowNavigationButtons(true);
+    })
+    .SearchPanel(s => s
+        .Visible(true)
+        .HighlightCaseSensitive(true)
+    )
+    .HeaderFilter(headerFilter => headerFilter.Visible(true))
+    .RemoteOperations(true)
+    .Columns(columns => {
+
+        //columns.AddFor(m => m.Id);
+        columns.Add().Caption("TT").CellTemplate(new JS("SoThuTu")).Width(50);
+
+        columns.AddFor(m => m.id_product).Caption("Tên sản phẩm")
+        .Lookup(lockup => lockup
+            .DataSource(d => d.WebApi().LoadAction("Get")
+            .RouteName("tbl_ProductApi").Key("Id"))
+            .DisplayExpr("product_title")
+            .ValueExpr("Id")
+            );
+
+        columns.AddFor(m => m.typeReport).Caption("Lý do báo cáo");
+
+        columns.AddFor(m => m.id_customer).Caption("Tên khách hàng")
+        .Lookup(lockup => lockup
+            .DataSource(d => d.WebApi().LoadAction("Get")
+            .RouteName("tbl_AccountApi").Key("Id"))
+            .DisplayExpr("fullname")
+            .ValueExpr("Id")
+            );
+    })
+    .ShowBorders(true)
+    .Editing(e => e.Mode(GridEditMode.Popup).UseIcons(true)
+        .AllowAdding(true)
+        .AllowUpdating(true)
+        .AllowDeleting(true)
+        .Popup(p => p
+                .Title("Thông tin màu sắc")
+                .ShowTitle(true)
+                .Width(700)
+                .Height(525)
+            )
+    )
+)*@

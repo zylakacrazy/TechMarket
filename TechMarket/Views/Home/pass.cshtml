@@ -1,0 +1,21 @@
+﻿
+@{
+    ViewBag.Title = "pass";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@{
+    if (Request.QueryString["mk"] == "1")
+    {
+        @Html.Partial("_pass1")
+    }
+    else if (Request.QueryString["mk"] == "2")
+    {
+        @Html.Partial("_pass2")
+    }
+    else
+    {
+        @Html.Partial("_pass3")
+    }
+}
+
+

@@ -1,0 +1,43 @@
+﻿
+@{
+    ViewBag.Title = "Coin";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+@using TechMarket.Models;
+<br />
+<div class="row">
+    <div class="col-sm-2">
+    </div>
+    <div class="col-sm-8">
+
+        @{
+            int a = int.Parse(User.Identity.Name);
+            SGDFleaMarketEntities db = new SGDFleaMarketEntities();
+            var result = db.tbl_Coin.Where(x => x.id_account == a);
+            float coin = 0;
+            foreach (var item in result)
+            {
+                coin += (float)item.coin_total;
+            }
+            var format = System.Globalization.CultureInfo.GetCultureInfo("vi-VN");
+
+        }
+        <div class="card">
+            <div class="card-body">
+                <h4>Tổng số xu hiện có: <i style="color:red">@String.Format(format, "{0:c0}", coin)</i></h4>
+            </div>
+        </div>
+        <a href="History" style="float:right;font-size:13px;padding:5px;">Lịch sử giao dịch <i class="fas fa-arrow-right"></i></a>
+        <br />
+        <hr />
+        @Html.Partial("_pay", "Payment")
+    </div>
+    <div class="col-sm-2">
+    </div>
+</div>
+
+
+
+@*@Html.Partial("partialHistoryTransaction", "Payment");*@

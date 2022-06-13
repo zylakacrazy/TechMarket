@@ -1,0 +1,657 @@
+﻿@model TechMarket.Models.tbl_Product
+
+
+<link href="~/Design/addProduct/addProduct.css" rel="stylesheet" />
+
+<!---form---->
+@using (Html.BeginForm("AddP", "Product", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    TechMarket.Models.SGDFleaMarketEntities db = new TechMarket.Models.SGDFleaMarketEntities();
+
+    @Html.AntiForgeryToken()
+    <div class="form-horizontal" style="width:70%;margin: 10px auto;">
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="row">
+            <div class="col-sm-4 card" style="padding:20px">
+                <!---anh product-->
+                <div class="file-upload1">
+                    <button class="file-upload-btn1" type="button" onclick="$('.file-upload-input1').trigger( 'click' )">Thêm ảnh</button>
+                    <div class="image-upload-wrap1">
+                        <input class="file-upload-input1" type='file' name="product_images" onchange="readURL1(this);" accept="image/*" />
+                        <div class="drag-text1">
+                            <h3>Kéo ảnh sản phẩm vào đây.</h3>
+                        </div>
+                    </div>
+                    <div class="file-upload-content1">
+                        <img class="file-upload-image1" src="#" alt="your image" />
+                        <div class="image-title-wrap1">
+                            <button type="button" onclick="removeUpload1()" class="remove-image1">Xóa</button>
+                            <span class="image-title1">Uploaded Image</span>
+                        </div>
+                    </div>
+                </div>
+
+                @*up nhieu hinh*@
+
+                <div class="file-upload">
+                    <button class="file-upload-btn" type="button" onclick="$('.file-upload-input').trigger( 'click' )">Thêm ảnh</button>
+
+                    <div class="image-upload-wrap">
+                        <input class="file-upload-input" type='file' name="images_name" multiple onchange="readURL(this);" accept="image/*" />
+                        <div class="drag-text">
+                            <h3>Kéo ảnh sản phẩm vào đây.</h3>
+                        </div>
+                    </div>
+                    <div class="file-upload-content">
+                        <img class="file-upload-image" src="#" alt="your image" />
+                        <div class="image-title-wrap">
+                            <button type="button" onclick="removeUpload()" class="remove-image">Xóa</button>
+                            <span class="image-title">Uploaded Image</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-8 card" style="padding:20px">
+
+                @*Tiêu đề sản phẩm*@
+                <h5>Tiêu đề</h5>
+                <div class="form-group">
+                    <div class="form-outline mb-4 frm-a00">
+                        @Html.EditorFor(model => model.product_title, new { htmlAttributes = new { @class = "form-control" } })
+                        <label class="form-label" for="product_title">Tiêu đề sản phẩm</label>
+                        @Html.ValidationMessageFor(model => model.product_title, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <h5>Thông tin cơ bản</h5>
+                @if (Request.QueryString["id"].ToString().Equals("1"))
+                {
+                    @HangSanXuat();
+                    @MauSac();
+                    @DungLuong();
+                    @Ram();
+                    @Cpu();
+                    <h5>Tình trạng</h5>
+                    @TinhTrang();
+                    @BaoHanh();
+                    <h5>Giá</h5>
+                    @Gia();
+                    @ThietBi(1, 1);
+                }
+                else if (Request.QueryString["id"].ToString().Equals("2"))
+                {
+                    @HangSanXuat();
+                    @Html.HiddenFor(model => model.id_color, new { Value = 7 })
+                    @PhienBan();
+                    @DungLuong();
+                    @MangHinh();
+                    @Html.HiddenFor(model => model.id_cpu, new { Value = 7 })
+                    <h5>Tình trạng</h5>
+                    @TinhTrang();
+                    @BaoHanh();
+                    <h5>Giá</h5>
+                    @Gia();
+                    @ThietBi(1, 2);
+                }
+                else if (Request.QueryString["id"].ToString().Equals("3"))
+                {
+                    @Html.HiddenFor(model => model.id_color, new { Value = 7 })
+                    @HangSanXuat();
+                    @Cpu();
+                    @Ram();
+                    @DungLuong();
+                    @LoaiOCung();
+                    @Gpu();
+                    @MangHinh();
+                    <h5>Tình trạng</h5>
+                    @TinhTrang();
+                    @BaoHanh();
+                    @Gia();
+                    @ThietBi(1, 3);
+                }
+                else if (Request.QueryString["id"].ToString().Equals("4"))
+                {
+                    @Html.HiddenFor(model => model.id_color, new { Value = 7 })
+                    @Cpu();
+                    @Ram();
+                    @Html.HiddenFor(model => model.id_manufacturer, new { Value = 18 })
+                    @DungLuong();
+                    @LoaiOCung();
+                    @Gpu();
+                    @MangHinh();
+                    <h5>Tình trạng</h5>
+                    @TinhTrang();
+                    @BaoHanh();
+                    <h5>Giá</h5>
+                    @Gia();
+                    @ThietBi(1, 4);
+                }
+                else if (Request.QueryString["id"].ToString().Equals("5"))
+                {
+                    @Html.HiddenFor(model => model.id_color, new { Value = 7 })
+                    @ThietBi(0, 0);
+                    <h5>Tình trạng</h5>
+                    @TinhTrang();
+                    @Html.HiddenFor(model => model.id_manufacturer, new { Value = 18 })
+                    @BaoHanh();
+                    <h5>Giá</h5>
+                    @Gia();
+                }
+                else if (Request.QueryString["id"].ToString().Equals("6"))
+                {
+                    @Html.HiddenFor(model => model.id_color, new { Value = 7 })
+                    @ThietBi(0, 0);
+                    @HangSanXuat();
+                    <h5>Tình trạng</h5>
+                    @TinhTrang();
+                    @BaoHanh();
+                    <h5>Giá</h5>
+                    @Gia();
+                }
+
+                else if (Request.QueryString["id"].ToString().Equals("7"))
+                {
+                    @Html.HiddenFor(model => model.id_color, new { Value = 7 })
+                    @ThietBi(0, 0);
+                    @HangSanXuat();
+                    <h5>Tình trạng</h5>
+                    @TinhTrang();
+                    @BaoHanh();
+                    <h5>Giá</h5>
+                    @Gia();
+                }
+                else if (Request.QueryString["id"].ToString().Equals("8"))
+                {
+                    @Html.HiddenFor(model => model.id_color, new { Value = 7 })
+                    @ThietBi(0, 0);
+                    @Html.HiddenFor(model => model.id_manufacturer, new { Value = 29 })
+                    <h5>Tình trạng</h5>
+                    @TinhTrang();
+                    @BaoHanh();
+                    <h5>Giá</h5>
+                    @Gia();
+                }
+                else if (Request.QueryString["id"].ToString().Equals("9"))
+                {
+                    @Html.HiddenFor(model => model.id_color, new { Value = 7 })
+                    @ThietBi(0, 0);
+                    @Html.HiddenFor(model => model.id_manufacturer, new { Value = 29 })
+                    <h5>Tình trạng</h5>
+                    @TinhTrang();
+                    @BaoHanh();
+                    <h5>Giá</h5>
+                    @Gia();
+                }
+                else if (Request.QueryString["id"].ToString().Equals("10"))
+                {
+                    @Html.HiddenFor(model => model.id_color, new { Value = 7 })
+                    @ThietBi(0, 0);
+                    @Html.HiddenFor(model => model.id_manufacturer, new { Value = 29 })
+                    <h5>Tình trạng</h5>
+                    @TinhTrang();
+                    @BaoHanh();
+                    <h5>Giá</h5>
+                    @Gia();
+                }
+                else if (Request.QueryString["id"].ToString().Equals("11"))
+                {
+                    @Html.HiddenFor(model => model.id_color, new { Value = 7 })
+                    @ThietBi(0, 0);
+                    @Html.HiddenFor(model => model.id_manufacturer, new { Value = 29 })
+                    <h5>Tình trạng</h5>
+                    @TinhTrang();
+                    @BaoHanh();
+                    <h5>Giá</h5>
+                    @Gia();
+                }
+
+                <h5>Chi tiết sản phẩm</h5>
+                @*chi tiết sản phẩm*@
+                <div class="form-outline mb-4" style="height: 121px !important; width: 95%;">
+                    <textarea class="form-control summernote"
+                              name="product_details" id="product_details"></textarea>
+                    <label class="form-label" for="product_details">Mô tả chi tiết</label>
+                    @Html.ValidationMessageFor(model => model.product_details, "", new { @class = "text-danger" })
+                </div>
+                @{
+                    int idcs = int.Parse(User.Identity.Name);
+                    var shop = db.tbl_Shop.Where(x => x.id_account == idcs).FirstOrDefault();
+
+                    if (shop != null)
+                    {
+                        if (Session["IdShop"] != null)
+                        {
+                            <div class="form-group">
+                                @Html.HiddenFor(model => model.id_shop, new { Value = shop.Id })
+                                @Html.ValidationMessageFor(model => model.id_shop, "", new { @class = "text-danger" })
+                            </div>
+                        }
+
+                    }
+                }
+                <div class="form-group">
+                    <div class="col-md-10">
+                        @Html.HiddenFor(model => model.id_account, new { Value = User.Identity.Name })
+                        @Html.HiddenFor(model => model.status, new { Value = 0 })
+                        @Html.ValidationMessageFor(model => model.id_account, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    <h5>Địa chỉ</h5>
+                    <div class="frm-fgh1">
+                        <select class="form-control" name="calc_shipping_provinces" required="">
+                            <option value="">Tỉnh / Thành phố</option>
+                        </select>
+                        <select class="form-control" name="calc_shipping_district" required="">
+                            <option value="">Quận / Huyện</option>
+                        </select>
+                        <input class="billing_address_1" name="address" type="hidden" value="">
+                        <input class="billing_address_2" name="diachi" type="hidden" value="">
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10" style="margin: auto;">
+                        <input type="submit" value="Đăng tin" class="btn btn-dark BTN-CR" />
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+}
+
+
+@helper HinhAnh()
+{
+    <div class="form-group">
+        <div class="col-md-10">
+            @Html.LabelFor(model => model.product_images, "Hình ảnh", htmlAttributes: new { @class = "form-label" })
+            <input type="file" onchange="checkFilesCount(this)" class="form-control" name="images_name" multiple id="images_name" />
+
+            @Html.ValidationMessageFor(model => model.product_images, "", new { @class = "text-danger" })
+        </div>
+    </div>
+}
+
+
+@helper HangSanXuat()
+{
+    <div class="form-group">
+        @Html.LabelFor(model => model.id_manufacturer, "Hãng sản xuất", htmlAttributes: new { @class = "control-label" })
+        @{
+            TechMarket.Models.SGDFleaMarketEntities db = new TechMarket.Models.SGDFleaMarketEntities();
+            int id = int.Parse(Request.QueryString["id"].ToString());
+            var hangs = db.tbl_Manufacturer.Where(x => x.id_device == id).ToList();
+            <div class="form-group" style="width: 100%;">
+                <select class="form-control" name="id_manufacturer">
+                    @foreach (var item in hangs)
+                    {
+                        <option value="@item.Id">@item.manufacturer_name</option>
+                    }
+                </select>
+            </div>
+        }
+
+        @Html.ValidationMessageFor(model => model.id_manufacturer, "", new { @class = "text-danger" })
+    </div>
+}
+@helper MauSac()
+{
+    <div class="form-group">
+        @Html.LabelFor(model => model.id_color, "Màu sắc", htmlAttributes: new { @class = "control-label" })
+        @{
+            TechMarket.Models.SGDFleaMarketEntities db = new TechMarket.Models.SGDFleaMarketEntities();
+            var color = db.tbl_Color.ToList();
+            <select class="form-control" name="id_color">
+                @foreach (var item1 in color)
+                {
+                    <option value="@item1.Id">@item1.color_name</option>
+                }
+            </select>
+        }   @Html.ValidationMessageFor(model => model.id_color, "", new { @class = "text-danger" })
+    </div>
+}
+@helper DungLuong()
+{
+    <div class="form-group">
+        @Html.LabelFor(model => model.product_capacity, "Dung lượng", htmlAttributes: new { @class = "control-label" })
+        <select class="form-control" name="product_capacity">
+            <option value="127">dưới 128GB</option>
+            <option value="128">128GB</option>
+            <option value="256">256GB</option>
+            <option value="512">512GB</option>
+            <option value="1024">1TB</option>
+            <option value="1025">Hơn 1TB</option>
+        </select>
+        @Html.ValidationMessageFor(model => model.product_capacity, "", new { @class = "text-danger" })
+    </div>
+}
+@helper Ram()
+{
+    <div class="form-group">
+        @Html.LabelFor(model => model.product_ram, "Dung lượng RAM", htmlAttributes: new { @class = "control-label" })
+        <select class="form-control" name="product_ram">
+            <optgroup label="RAM">
+                <option value="2">2GB</option>
+                <option value="4">4GB</option>
+                <option value="6">6GB</option>
+                <option value="8">8GB</option>
+                <option value="12">12GB</option>
+                <option value="16">16GB</option>
+                <option value="32">32GB</option>
+                <option value="33">Khác</option>
+            </optgroup>
+        </select>
+        @Html.ValidationMessageFor(model => model.product_ram, "", new { @class = "text-danger" })
+    </div>
+}
+@helper Cpu()
+{
+    <div class="form-group">
+        @Html.LabelFor(model => model.id_cpu, "CPU", htmlAttributes: new { @class = "control-label" })
+        @{
+            TechMarket.Models.SGDFleaMarketEntities db = new TechMarket.Models.SGDFleaMarketEntities();
+            int id = int.Parse(Request.QueryString["id"].ToString());
+            var cpu = db.tbl_CPU.Where(x => x.id_device == id).ToList();
+            <select class="form-control" name="id_cpu">
+                @foreach (var item2 in cpu)
+                {
+                    <option value="@item2.Id">@item2.cpu_name</option>
+                }
+            </select>
+        }
+        @Html.ValidationMessageFor(model => model.id_cpu, "", new { @class = "text-danger" })
+    </div>
+}
+@helper TinhTrang()
+{
+    <div class="form-group">
+        @Html.LabelFor(model => model.product_status, "Trạng thái", htmlAttributes: new { @class = "control-label" })
+        <select class="form-control" name="product_status">
+            <optgroup label="Tình hình">
+                <option value="1">Mới</option>
+                <option value="2">Đã sử dụng (Chưa sửa chửa)</option>
+                <option value="3">Đã sử dụng (Đã sửa chửa)</option>
+            </optgroup>
+        </select>
+        @Html.ValidationMessageFor(model => model.product_status, "", new { @class = "text-danger" })
+    </div>
+}
+@helper BaoHanh()
+{
+    <div class="form-group">
+        @Html.LabelFor(model => model.product_insurance, "Bảo hành", htmlAttributes: new { @class = "control-label" })
+        <select class="form-control" name="product_insurance">
+            <option value="12 tháng">12 tháng</option>
+            <option value="24 tháng">24 tháng</option>
+            <option value="more">Khác</option>
+        </select>
+        @Html.ValidationMessageFor(model => model.product_insurance, "", new { @class = "text-danger" })
+    </div>
+}
+@helper Gia()
+{
+    <div class="form-outline mb-4" style="width: 95%;">
+        <input type="text" class="form-control CurrencyInput" name="product_price1" id="product_price1" value="" />
+        @Html.LabelFor(model => model.product_price, "Giá", htmlAttributes: new { @class = "form-label" })
+        @Html.ValidationMessageFor(model => model.product_price, "", new { @class = "text-danger" })
+    </div>
+    <script>
+        $('input.CurrencyInput').on('input', function (e) {
+            $(this).val(formatCurrency(this.value.replace(/[,VNĐ]/g, '')));
+        }).on('keypress', function (e) {
+            if (!$.isNumeric(String.fromCharCode(e.which))) e.preventDefault();
+        }).on('paste', function (e) {
+            var cb = e.originalEvent.clipboardData || window.clipboardData;
+            if (!$.isNumeric(cb.getData('text'))) e.preventDefault();
+        });
+        function formatCurrency(number) {
+            var n = number.split('').reverse().join("");
+            var n2 = n.replace(/\d\d\d(?!$)/g, "$&,");
+            return n2.split('').reverse().join('') + 'VNĐ';
+        }
+    </script>
+}
+@helper ThietBi(int index, int bien)
+{
+    if (index == 0)
+    {
+        <div class="form-group">
+            @{
+                TechMarket.Models.SGDFleaMarketEntities db = new TechMarket.Models.SGDFleaMarketEntities();
+                int id = int.Parse(Request.QueryString["id"].ToString());
+                var thietbi = db.tbl_Device.Where(x => x.id_typedevice == id).ToList();
+                <select class="form-control" name="id_device">
+                    @foreach (var item4 in thietbi)
+                    {
+                        <option value="@item4.Id">@item4.device_name</option>
+                    }
+                </select>
+            }
+            @Html.ValidationMessageFor(model => model.id_device, "", new { @class = "text-danger" })
+        </div>
+    }
+    else
+    {
+        <div class="form-group">
+            @Html.HiddenFor(model => model.id_device, new { Value = bien })
+            @Html.ValidationMessageFor(model => model.id_device, "", new { @class = "text-danger" })
+        </div>
+    }
+}
+@helper PhienBan()
+{
+    <div class="form-group">
+        @Html.LabelFor(model => model.product_version, "Phiên bản", htmlAttributes: new { @class = "control-label" })
+        <select class="form-control" name="product_version">
+            <option value="Chính hãng">Chính hãng</option>
+            <option value="Xách tay">Xách tay</option>
+        </select>
+        @Html.ValidationMessageFor(model => model.product_version, "", new { @class = "text-danger" })
+    </div>
+}
+@helper MangHinh()
+{
+    <div class="form-group">
+        @Html.LabelFor(model => model.id_screensize, "Kích thước màng hình", htmlAttributes: new { @class = "control-label" })
+        @{
+            TechMarket.Models.SGDFleaMarketEntities db = new TechMarket.Models.SGDFleaMarketEntities();
+            var manghinh = db.tbl_Screensize.ToList();
+            <select class="form-control" name="id_screensize">
+                @foreach (var item3 in manghinh)
+                {
+                    <option value="@item3.Id">@item3.screensize_name</option>
+                }
+            </select>
+        }
+        @Html.ValidationMessageFor(model => model.id_screensize, "", new { @class = "text-danger" })
+    </div>
+}
+@helper LoaiOCung()
+{
+    <div class="form-group">
+        @Html.LabelFor(model => model.product_disk, "Loại ổ cứng", htmlAttributes: new { @class = "control-label" })
+        <select class="form-control" name="product_disk">
+            <option value="SSD">SSD</option>
+            <option value="HDD">HDD</option>
+            <option value="SHDD">SHDD</option>
+            <option value="more">Khác</option>
+        </select>
+        @Html.ValidationMessageFor(model => model.product_disk, "", new { @class = "text-danger" })
+    </div>
+}
+@helper Gpu()
+{
+    <div class="form-group">
+        @Html.LabelFor(model => model.product_gpu, "Card màng hình (GPU)", htmlAttributes: new { @class = "control-label" })
+        <select class="form-control" name="product_gpu">
+            <optgroup label="GPU">
+                <option value="Onboard">Onboard</option>
+                <option value="intel">Intel</option>
+                <option value="AMD">AMD</option>
+                <option value="more">Khác</option>
+            </optgroup>
+        </select>
+        @Html.ValidationMessageFor(model => model.product_gpu, "", new { @class = "text-danger" })
+    </div>
+}
+<div style="padding-left: 12rem;">
+    <i class="fas fa-chevron-left"></i>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+<script type="text/javascript">
+    function ValidateNumber(e) {
+        var evt = (e) ? e : window.event;
+        var charCode = (evt.keyCode) ? evt.keyCode : evt.which;
+        if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+            return false;
+        }
+        return true;
+    };
+    function checkFilesCount(id) {
+        if (id.files.length > 5) {
+            alert('Tối đa 5 hình ảnh mô tả');
+            document.getElementById("images_name").value = "";
+        }
+    }
+</script>
+
+
+<script>
+    function readURL(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                $('.image-upload-wrap').hide();
+                $('.file-upload-image').attr('src', e.target.result);
+                $('.file-upload-content').show();
+                $('.image-title').html(input.files[0].name);
+            };
+            reader.readAsDataURL(input.files[0]);
+        } else {
+            removeUpload();
+        }
+    }
+    function removeUpload() {
+        $('.file-upload-input').replaceWith($('.file-upload-input').clone());
+        $('.file-upload-content').hide();
+        $('.image-upload-wrap').show();
+    }
+    $('.image-upload-wrap').bind('dragover', function () {
+        $('.image-upload-wrap').addClass('image-dropping');
+    });
+    $('.image-upload-wrap').bind('dragleave', function () {
+        $('.image-upload-wrap').removeClass('image-dropping');
+    });
+</script>
+
+<script>
+    function readURL1(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                $('.image-upload-wrap1').hide();
+                $('.file-upload-image1').attr('src', e.target.result);
+                $('.file-upload-content1').show();
+                $('.image-title1').html(input.files[0].name);
+            };
+            reader.readAsDataURL(input.files[0]);
+        } else {
+            removeUpload();
+        }
+    }
+    function removeUpload1() {
+        $('.file-upload-input1').replaceWith($('.file-upload-input1').clone());
+        $('.file-upload-content1').hide();
+        $('.image-upload-wrap1').show();
+    }
+    $('.image-upload-wrap1').bind('dragover', function () {
+        $('.image-upload-wrap1').addClass('image-dropping1');
+    });
+    $('.image-upload-wrap1').bind('dragleave', function () {
+        $('.image-upload-wrap1').removeClass('image-dropping1');
+    });
+</script>
+
+
+<script src='https://cdn.jsdelivr.net/gh/vietblogdao/js/districts.min.js'></script>
+
+<script>
+    //<![CDATA[
+    if (address_2 = localStorage.getItem('address_2_saved')) {
+        $('select[name="calc_shipping_district"] option').each(function () {
+            if ($(this).text() == address_2) {
+                $(this).attr('selected', '')
+            }
+        })
+        $('input.billing_address_2').attr('value', address_2)
+    }
+    if (district = localStorage.getItem('district')) {
+        $('select[name="calc_shipping_district"]').html(district)
+        $('select[name="calc_shipping_district"]').on('change', function () {
+            var target = $(this).children('option:selected')
+            target.attr('selected', '')
+            $('select[name="calc_shipping_district"] option').not(target).removeAttr('selected')
+            address_2 = target.text()
+            $('input.billing_address_2').attr('value', address_2)
+            district = $('select[name="calc_shipping_district"]').html()
+            localStorage.setItem('district', district)
+            localStorage.setItem('address_2_saved', address_2)
+        })
+    }
+    $('select[name="calc_shipping_provinces"]').each(function () {
+        var $this = $(this),
+            stc = ''
+        c.forEach(function (i, e) {
+            e += +1
+            stc += '<option value=' + e + '>' + i + '</option>'
+            $this.html('<option value="">Tỉnh / Thành phố</option>' + stc)
+            if (address_1 = localStorage.getItem('address_1_saved')) {
+                $('select[name="calc_shipping_provinces"] option').each(function () {
+                    if ($(this).text() == address_1) {
+                        $(this).attr('selected', '')
+                    }
+                })
+                $('input.billing_address_1').attr('value', address_1)
+            }
+            $this.on('change', function (i) {
+                i = $this.children('option:selected').index() - 1
+                var str = '',
+                    r = $this.val()
+                if (r != '') {
+                    arr[i].forEach(function (el) {
+                        str += '<option value="' + el + '">' + el + '</option>'
+                        $('select[name="calc_shipping_district"]').html('<option value="">Quận / Huyện</option>' + str)
+                    })
+                    var address_1 = $this.children('option:selected').text()
+                    var district = $('select[name="calc_shipping_district"]').html()
+                    localStorage.setItem('address_1_saved', address_1)
+                    localStorage.setItem('district', district)
+                    $('select[name="calc_shipping_district"]').on('change', function () {
+                        var target = $(this).children('option:selected')
+                        target.attr('selected', '')
+                        $('select[name="calc_shipping_district"] option').not(target).removeAttr('selected')
+                        var address_2 = target.text()
+                        $('input.billing_address_2').attr('value', address_2)
+                        district = $('select[name="calc_shipping_district"]').html()
+                        localStorage.setItem('district', district)
+                        localStorage.setItem('address_2_saved', address_2)
+                    })
+                } else {
+                    $('select[name="calc_shipping_district"]').html('<option value="">Quận / Huyện</option>')
+                    district = $('select[name="calc_shipping_district"]').html()
+                    localStorage.setItem('district', district)
+                    localStorage.removeItem('address_1_saved', address_1)
+                }
+            })
+        })
+    })
+//]]></script>

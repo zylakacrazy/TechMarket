@@ -1,0 +1,271 @@
+﻿@{
+    if (Session["role"] != null)
+    {
+        if (int.Parse(Session["role"].ToString()) == 0)
+        {
+            Layout = "~/Views/Shared/_Template.cshtml";
+            <a class="btn btn-outline-dark" href="~/Manage/browse">Quay lại</a>
+        }
+    }
+}
+@using TechMarket.Models;
+
+<style>
+    body{
+        width: 100%;
+        box-sizing: border-box;
+    }
+    .carousel-inner {
+        height: 100% !important;
+        width: 80% !important;
+    }
+        .carousel-item img {
+          
+            inset: 0px;
+            box-sizing: border-box;
+            padding: 0px;
+            margin: auto;
+            display: block;
+        }
+    .share {
+        display:flex;
+    }
+    .zalo-share-button {
+        width: 37px;
+        height: 37px;
+    }
+
+    .box_content {
+        width: 90%;
+        /*height: 300px;*/
+        text-align: center;
+        border-radius: 25px;
+        position: relative;
+        margin: auto;
+        margin-top: 15px;
+    }
+
+        .box_content .img1 {
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            object-fit: cover;
+            object-position: 2px -75px;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+        }
+
+    .box {
+        width: 140px;
+        height: 140px;
+        background-size: cover;
+        border-radius: 50%;
+        border: 4px solid #ccc;
+        margin: auto;
+        position: absolute;
+        top: 37%;
+        left: 50%;
+        margin-top: -25px;
+        margin-left: -75px;
+    }
+
+        .box img {
+            border-radius: 50%;
+            width: 100%;
+            height: 100%;
+        }
+
+</style>
+<script src="https://sp.zalo.me/plugins/sdk.js"></script>
+<br />
+<div class="container card">
+    <div style="padding:15px">
+        <div class="row">
+            <div class="col-sm-6">
+                <br />
+                <div id="carouselExampleIndicators" style="height:620px" class="carousel slide" data-bs-ride="carousel">
+                    <div class="carousel-indicators">
+                        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                        <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
+                    </div>
+                    <div class="carousel-inner">
+                        <div class="carousel-item active">
+                            <img class="img-fluid d-block w-100" src="@Url.Content("~/Images/Product/" + Model.product_images)" />
+                        </div>
+                        @{
+                            SGDFleaMarketEntities db = new SGDFleaMarketEntities();
+                            int idssp = Model.Id;
+                            var img_sp = db.tbl_Images.Where(x => x.id_product == idssp);
+                            foreach (var item in img_sp)
+                            {
+                                <div class="carousel-item">
+                                    <img class="img-fluid d-block w-100" src="@Url.Content("~/Images/Product/" + item.images_name)" />
+                                </div>
+                            }
+                        }
+                    </div>
+                    <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Previous</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                        <span class="visually-hidden">Next</span>
+                    </button>
+                </div>
+            </div>
+            <div class="col-sm-6">
+
+
+                <br />
+                <h3 style="padding-top: 25px;"> @Model.product_title</h3>
+                @{
+                    var format = System.Globalization.CultureInfo.GetCultureInfo("vi-VN");
+                }
+                <h5 style="color:red;">Giá sản phẩm: @String.Format(format, "{0:c0}", Model.product_price)</h5>
+                @{
+                    var hang = db.tbl_Manufacturer.Find(Model.id_manufacturer);
+                    var mau = db.tbl_Color.Find(Model.id_color);
+                    var cpu1 = db.tbl_CPU.Find(Model.id_cpu);
+
+                    string tenhang = hang.manufacturer_name;
+                    string color = mau.color_name;
+                    string status;
+                    if (Model.product_status == 0)
+                    {
+                        status = "Mới";
+                    }
+                    else if (Model.product_status == 1)
+                    {
+                        status = "Đã sử dụng (Chưa sửa chửa)";
+                    }
+                    else
+                    {
+                        status = "Đã sử dụng (Đã sửa chửa)";
+                    }
+
+                }
+                <p>Mô tả:</p>
+                <p style="text-align:justify">@Model.product_details</p>
+                <hr />
+                <div class="row">
+                    <div class="col-sm-6">
+                        @{
+                            if (tenhang != null)
+                            {
+                                <p><i class="fas fa-industry"></i> Hãng sản xuất: @tenhang</p>
+                            }
+                        }
+                        <p><i class="far fa-file-alt"></i> Tình trạng: @status</p>
+                        <p><i class="fas fa-shield-alt"></i> Bảo hành: @Model.product_insurance</p>
+                    </div>
+                    <div class="col-sm-6">
+                        <p><i class="fas fa-palette"></i> Màu sắc: @color</p>
+                        <p><i class="fas fa-memory"></i> RAM: @Model.product_ram</p>
+                        <p><i class="fas fa-hdd"></i> Dung lượng: @Model.product_capacity</p>
+                        <p><i class="fas fa-dice-d20"></i> GPU: @Model.product_gpu</p>
+                    </div>
+                </div>
+                <p><i class="fas fa-map-marker-alt"></i> Địa chỉ: <label style="color:#e8217e">@Model.Address</label></p>
+                @{
+                    if (cpu1 != null)
+                    {
+                        string cpu = cpu1.cpu_name;
+                        <p><i class="fas fa-microchip"></i> CPU: @cpu</p>
+                    }
+                }
+            </div>
+        </div>
+        <hr />
+        <div class="row">
+            <div class="col-sm-6" style="padding:20px">
+                <br />
+                <div class="share">
+                    Chia sẻ tin đăng này cho bạn bè:
+                    @{ string link = HttpContext.Current.Request.Url.AbsoluteUri; }
+                    <div class="share-face">
+                        <a class="btn btn-primary btn-floating mx-1" target='_blank' href='http://www.facebook.com/share.php?u=@link' title='Chia sẽ lên Facebook'><i class="fab fa-facebook-f"></i></a>
+
+                    </div>
+                    <div class="share-zalo">
+                        <a class="zalo-share-button" style="border-radius:50%;" data-href="" data-oaid="579745863508352884" data-layout="4" data-color="blue" data-customize="false"></a>
+
+                    </div>
+                </div>
+                <table>
+                    <tr>
+                        <td><img src="~/Images/3_mobile.png" width="130" /></td>
+                        <td>NÊN gặp mặt trực tiếp kiểm tra hàng trước khi giao dịch.</td>
+                    </tr>
+                </table>
+                <br />
+                <br />
+                @{
+                    if (User.Identity.IsAuthenticated)
+                    {
+                        int idcus = int.Parse(User.Identity.Name);
+                        <a class="btn btn-outline-warning" href="@Url.Action("Report", "Product", new { idsp = Model.Id, idcustomer = idcus, details = "Tin không hợp lệ" })">Báo tin không hợp lệ!</a>
+                        <a class="btn btn-outline-warning" href="@Url.Action("Report", "Product", new { idsp = Model.Id, idcustomer = idcus, details = "Tin đã bán" })">Báo tin đã bán!</a>
+                    }
+                }
+            </div>
+            <div class="col-sm-6" style="padding:20px">
+                <br />
+                @{
+                    int a = Model.id_account;
+                    var result = db.tbl_Account.Find(a);
+                    if (Model.id_shop != null)
+                    {
+                        int ids = Model.id_shop;
+                        var cusshop = db.tbl_Shop.Find(ids);
+                        string name = cusshop.shop_name;
+                        <p>
+                            Shop bán:
+                            <div class="box_content">
+                                <img class="img1 img-fluid"
+                                     src="../@cusshop.shop_background" />
+                                <div class="box">
+                                    <img src="../@cusshop.shop_avatar" />
+                                </div>
+                                <a href="~/Shop/shopprofile?id=@ids">
+                                    <center style="padding-top:0px">
+                                        <h3>@name</h3>
+                                    </center>
+                                </a>
+                            </div>
+                        </p>
+                        <hr />
+                    }
+                    else
+                    {
+                        if (result.images == null)
+                        {
+                            <p>Người bán:  <a href="~/Home/profile?id=@result.Id"><i class="fas fa-user"></i><span> @result.fullname</span></a><br /></p>
+                        }
+                        else
+                        {
+                            <p>Người bán:  <a href="~/Home/profile?id=@result.Id"><img src="../@result.images" style="border-radius:50%;" width="30" alt="Avatar" /><span>@result.fullname</span> </a><br /> </p>
+                        }
+                    }
+                    <br />
+                    <div class="alert alert-primary" role="alert">
+                        <span>Số điện thoại: @result.phone</span>
+                    </div>
+                }
+                <a href="~/Home/Chat?id=@a" class="btn btn-outline-success btn-block mb-4"><i class="far fa-comments fa-2x"></i>  Chat với người bán</a>
+                
+            </div>
+        </div>
+        <br />
+        @*<div class="alert alert-warning d-flex align-items-center" role="alert">*@
+
+        @*</div>*@
+
+        <hr />
+        <h5>Tin rao khác của @result.fullname </h5>
+        @Html.Partial("partialRelatedProduct", new ViewDataDictionary(ViewData) { { "idcus", result.Id } })
+        <br />
+    </div>
+</div>
+

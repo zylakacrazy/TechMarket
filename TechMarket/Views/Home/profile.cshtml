@@ -1,0 +1,246 @@
+﻿
+@{
+    ViewBag.Title = "profile";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<style>
+    .row {
+        justify-content: center;
+
+    }
+    
+</style>
+<br />
+<h2>Thông tin cá nhân</h2>
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm-4">
+            <br />
+            <div class="card">
+                <center>
+                    @{
+                        if (Model.images == null)
+                        {
+                            <img style="border-radius:50%; height:150px; width:150px;" src="~/Images/Avatar/userjpg.jpg" />
+                        }
+                        else
+                        {
+                            <img src="@Model.images" class="card-img-top" style="border-radius:50%; height:150px; width:150px;" alt="Avatar" />
+                        }
+                    }
+                </center>
+                <div class="card-body">
+                    <center class="card-text">
+                        <h5>@Model.fullname</h5>
+                        @{ 
+                            int id = int.Parse(User.Identity.Name); 
+                            if(Request.QueryString["id"].ToString() == User.Identity.Name)
+                            {
+                                <p class="p1">
+                                    <a class="btn btn-outline-dark" href="@Url.Action("editProfile", new { id = id })">
+                                    Cập nhật thông tin cá nhân
+                                    </a>
+                                </p>
+                            }
+                        }
+                    </center>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <br />
+            <div class="card">
+                <div class="card-body">
+                    <i class="pad fas fa-map-marker-alt"></i><b> Địa chỉ liên lạc:</b> @Model.address
+                    <br />
+                    <i class="pad fab fa-facebook"></i><b> Facebook:</b> <a target="_blank" href="@Model.facebook">Xem trang cá nhân</a>
+                    <br />
+                    <i class="pad fas fa-envelope"></i> <b> Email:</b> @Model.email
+                    <br />
+                    <i class="pad fas fa-phone-square-alt"></i><b> Số điện thoại:</b> @Model.phone
+                    <br />
+                    @{
+                        TechMarket.Models.SGDFleaMarketEntities db = new TechMarket.Models.SGDFleaMarketEntities();
+                        int a = int.Parse(User.Identity.Name);
+                        var result = db.tbl_Coin.Where(x => x.id_account == a);
+                        float coin = 0;
+                        foreach (var item in result)
+                        {
+                            coin += (float)item.coin_total;
+                        }
+                    }
+                    @if (Request.QueryString["id"].ToString() == User.Identity.Name)
+                    {
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <p><i class="pad fas fa-coins"></i> <b>Xu giao dịch:</b> @coin</p>
+                            </div>
+                            <div class="col-sm-6">
+                                <center>
+                                    <a class="pad" style="font-size:12px" href="@Url.Action("Index", "Payment")">Nạp Xu</a>
+                                    <a class="pad" style="font-size:12px" href="" data-mdb-toggle="modal" data-mdb-target="#exampleModal">Chi Tiết</a>
+                                </center>
+                            </div>
+                        </div>
+                    }
+                        
+                    </div>
+            </div>
+        </div>
+        <div class="col-sm-2">
+            <div>
+                <center>
+                    Đánh giá
+                </center>
+                @{ 
+                    float sao = 0, dem = 0, tongsao = 0;
+                    int bien = Model.Id;
+                    var tinhsao = db.tbl_Evaluete.Where(x => x.id_account == bien);
+                    foreach (var item in tinhsao)
+                    {
+                        sao += (float)item.star;
+                        dem++;
+                    }
+                    tongsao = (float)sao / dem;
+                }
+            <center>
+                @if (tinhsao.Count() == 0)
+                {
+                    <h6>Chưa có đánh giá: <i class="fas fa-star" style="color:gold;"></i></h6>
+                }
+                else
+                {
+                    <h4>@tongsao <i class="fas fa-star" style="color:gold;"></i></h4>
+                }
+
+            </center>
+                <center>
+                @using (Html.BeginForm("DanhGia", "Home", FormMethod.Post, new { @id = "frmLogin" }))
+                {
+                    @Html.AntiForgeryToken()
+                    <center>
+                    <input type="text" hidden name="idcus" value="@Model.Id" />
+                    <input type="text" hidden name="idshop" value="0" />
+                    <input type="text" hidden name="loai" value="0" />
+                    <fieldset class="rating">
+                        <input type="radio" id="star5" name="rating" value="5" />
+                        <label class="full" for="star5" title="Awesome - 5 stars"></label>
+
+                        <input type="radio" id="star4" name="rating" value="4" />
+                        <label class="full" for="star4" title="Pretty good - 4 stars"></label>
+
+                        <input type="radio" id="star3" name="rating" value="3" />
+                        <label class="full" for="star3" title="Meh - 3 stars"></label>
+
+                        <input type="radio" id="star2" name="rating" value="2" />
+                        <label class="full" for="star2" title="Kinda bad - 2 stars"></label>
+
+                        <input type="radio" checked id="star1" name="rating" value="1" />
+                        <label class="full" for="star1" title="Sucks big time - 1 star"></label>
+                    </fieldset>
+                    
+                    <input type="submit" class="btn btn-outline-success" name="submit" value="Đánh giá" />
+                    </center>
+                }
+                </center>
+                </div>
+        </div>
+    </div>
+</div>
+<br />
+
+<hr />
+@Html.Partial("partialProduct", "Product")
+
+<!---modal-->
+<div class="modal fade"
+     id="exampleModal"
+     tabindex="-1"
+     aria-labelledby="exampleModalLabel"
+     aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Hướng dẫn sử dụng Xu</h5>
+                <button type="button"
+                        class="btn-close"
+                        data-mdb-dismiss="modal"
+                        aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Xu là gì? Giá trị và phạm vi hoạt động của Xu!
+                Xu là công cụ thanh toán do Công ty TNHH Chợ Tốt (“Chợ Tốt”) phát hành để người dùng sử dụng thanh toán trước cho các hàng hoá, dịch vụ mà do chính Chợ Tốt cung cấp. Xu duy nhất được sử dụng để thanh toán trước cho các hàng hoá, dịch vụ được cung cấp bởi Chợ Tốt, bao gồm trên các trang chotot.com, m.chotot.com, vieclamtot.com, m.vieclamtot.com và ứng dụng Chợ Tốt (Android, iOS và Window Phone).
+                Xu không được sử dụng để thanh toán cho các hàng hoá, dịch vụ khác mà Chợ Tốt không cung cấp. Vì vậy, người dùng không thể sử dụng Xu để thanh toán cho các hàng hoá, dịch vụ được cung cấp bởi các doanh nghiệp hoặc bất kỳ bên thứ ba khác.
+                Xu không được sử dụng để luân chuyển giữa các tài khoản cá nhân khác nhau trên Chợ Tốt, không phát sinh lãi suất, không được quy đổi để rút tiền mặt ra khỏi tài khoản.
+                Khi người dùng sử dụng Xu để thanh toán trước cho các hàng hoá, dịch vụ do Chợ Tốt cung cấp, 01 Xu sẽ được quy đổi tương đương với 01 Việt Nam Đồng ((1 Xu = 1 Việt Nam Đồng), số tiền thanh toán trước tương ứng với số Xu được quy đổi sẽ được trừ đi tương ứng trong tài khoản Xu của người dùng.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-mdb-dismiss="modal" style="display: flex; justify-content: center; align-items: center;">
+                    Đóng
+                </button>
+
+            </div>
+        </div>
+    </div>
+</div>
+<style>
+    .giaodich {
+        margin-left: 50px;
+    }
+    .giaodich p {
+            text-align: center;
+            padding-top: 25px;
+    }
+    .giaodich .btn-outline-primary {
+            margin-top: 25px;
+            margin-left: 50px;
+    }
+    .giaodich .btn-outline-primary:hover {
+                background: #0066ff;
+                color: #fff;
+    }
+    .xu {
+        text-align: center;
+        padding-top: 3rem;
+    }
+    .pad{
+        padding:10px
+    }
+
+
+
+        .rating {
+            border: none;
+            float: left;
+        }
+        .rating > input {
+            display: none;
+        }
+        .rating > label:before {
+            margin: 5px;
+            font-size: 1.2em;
+            font-family: FontAwesome;
+            display: inline-block;
+            content: "\f005";
+        }
+        .rating > .half:before {
+            content: "\f089";
+            position: absolute;
+        }
+        .rating > label {
+            color: #ddd;
+            float: right;
+        }
+        .rating > input:checked ~ label,
+        .rating:not(:checked) > label:hover,
+        .rating:not(:checked) > label:hover ~ label {
+            color: #ffd700;
+        }
+        .rating > input:checked + label:hover,
+        .rating > input:checked ~ label:hover,
+        .rating > label:hover ~ input:checked ~ label,
+        .rating > input:checked ~ label:hover ~ label {
+            color: #ffed85;
+        }
+</style>

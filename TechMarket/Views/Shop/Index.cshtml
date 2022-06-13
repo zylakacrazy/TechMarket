@@ -1,0 +1,375 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@{
+    TechMarket.Models.SGDFleaMarketEntities db = new TechMarket.Models.SGDFleaMarketEntities();
+    int idacc = int.Parse(User.Identity.Name);
+    var coin = db.tbl_Coin.Where(x => x.id_account == idacc);
+    float tong = 0;
+    foreach (var item in coin)
+    {
+        tong += (float)item.coin_total;
+    }
+
+    if (tong <= 10000)
+    {
+        <script type="text/javascript" charset="utf-8">
+            window.onload = function () {
+            alert("Vui lòng nạp thêm tiền để tiếp tục!");
+            var url = '@Url.Action("Index", "Payment")';
+            window.location.href = url;
+        };
+        </script>
+    }
+}
+
+@model TechMarket.Models.tbl_Shop
+<style>
+    .container form {
+        width: 80%;
+        box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+        margin: auto;
+    }
+
+    .form-group {
+        width: 60%;
+        margin: auto;
+    }
+
+    .crt {
+        background: #0066ff;
+        color: #fff;
+    }
+</style>
+<br />
+<h4>Tạo cửa hàng điện tử</h4>
+@using (Html.BeginForm("Index", "Shop", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    <br />
+    <div class="box_content">
+        <img class="img1" id="image1" />
+        <div class="box">
+            <img id="image" />
+        </div>
+    </div>
+    <div class="h1_content">
+        <h1 id="tenhienthi"></h1>
+        <p>(Shop Bán Điện Thoại)</p>
+    </div>
+
+    <div class="form-horizontal">
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            <div class="form-outline mb-4">
+                @Html.EditorFor(model => model.shop_name, new { htmlAttributes = new { @class = "form-control", @onchange = "changeHandler(event)" } })
+                @Html.LabelFor(model => model.shop_name, "Tên cửa hàng", htmlAttributes: new { @class = "form-label" })
+                @Html.ValidationMessageFor(model => model.shop_name, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="form-label">Ảnh đại diện</label>
+            <div class="form-outline mb-4">
+                <input type="file" name="shop_avatar" id="shop_avatar" class="form-control" value="" />
+                @Html.ValidationMessageFor(model => model.shop_avatar, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="form-label">Hình nền</label>
+            <div class="form-outline mb-4">
+                <input type="file" name="shop_background" id="shop_background" class="form-control" value="" />
+                @Html.ValidationMessageFor(model => model.shop_background, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        
+
+        <div class="form-group">
+            <div class="form-outline mb-4">
+                @Html.EditorFor(model => model.shop_introduce, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.LabelFor(model => model.shop_introduce, "Giới thiệu về cửa hàng", htmlAttributes: new { @class = "form-label" })
+                @Html.ValidationMessageFor(model => model.shop_introduce, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="form-outline mb-4">
+                @Html.EditorFor(model => model.shop_phone, new { htmlAttributes = new { @class = "form-control", onkeydown = "return ValidateNumber(event);" } })
+                @Html.LabelFor(model => model.shop_phone, "Số điện thoại kinh doanh", htmlAttributes: new { @class = "form-label" })
+                @Html.ValidationMessageFor(model => model.shop_phone, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            <label>Địa chỉ</label>
+            <div class="frm-fgh1">
+                <select name="calc_shipping_provinces" required="" class="form-control">
+                    <option value="">Tỉnh / Thành phố</option>
+                </select>
+                <br />
+                <select name="calc_shipping_district" required="" class="form-control">
+                    <option value="">Quận / Huyện</option>
+                </select>
+                <input class="billing_address_1" name="shop_address" type="hidden" value="">
+                <input class="billing_address_2" name="diachi" type="hidden" value="">
+            </div>
+        </div>
+
+        @*<div class="form-group">
+                <div class="form-outline mb-4">
+                    @Html.EditorFor(model => model.shop_link, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.LabelFor(model => model.shop_link, htmlAttributes: new { @class = "form-label" })
+                    @Html.ValidationMessageFor(model => model.shop_link, "", new { @class = "text-danger" })
+                </div>
+            </div>*@
+
+        <div class="form-group">
+            <div class="form-outline mb-4">
+                @Html.HiddenFor(model => model.id_account, new { Value = User.Identity.Name })
+                @Html.ValidationMessageFor(model => model.id_account, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 form-outline mb-4" style="display: flex; justify-content:center;">
+                <input type="submit" value="Tạo cửa hàng" class="btn btn-default crt" />
+            </div>
+        </div><br /><br />
+    </div>
+}
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+<script>
+    document.getElementById("shop_avatar").onchange = function () {
+        var reader = new FileReader();
+
+        reader.onload = function (e) {
+            // get loaded data and render thumbnail.
+            document.getElementById("image").src = e.target.result;
+        };
+
+        // read the image file as a data URL.
+        reader.readAsDataURL(this.files[0]);
+    };
+    document.getElementById("shop_background").onchange = function () {
+        var reader = new FileReader();
+
+        reader.onload = function (e) {
+            // get loaded data and render thumbnail.
+            document.getElementById("image1").src = e.target.result;
+        };
+
+        // read the image file as a data URL.
+        reader.readAsDataURL(this.files[0]);
+    };
+    document.getElementById("tenhienthi").onchange = function () {
+        var reader = new FileReader();
+
+        reader.onload = function (e) {
+            // get loaded data and render thumbnail.
+            document.getElementById("image1").src = e.target.result;
+        };
+
+        // read the image file as a data URL.
+        reader.readAsDataURL(this.files[0]);
+    };
+    function changeHandler(evt) {
+        let source = document.querySelector('#shop_name');
+        let target = document.querySelector('#tenhienthi');
+        source.addEventListener('change', function () {
+            target.textContent = this.value;
+        });
+    }
+</script>
+
+<style>
+    .box_content {
+        width: 90%;
+        height: 300px;
+        text-align: center;
+        border-radius: 25px;
+        position: relative;
+        margin: auto;
+        margin-top: 15px;
+    }
+
+        .box_content .img1 {
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            object-fit: cover;
+            object-position: 2px -75px;
+            border-top-left-radius: 10px;
+            border-top-right-radius: 10px;
+        }
+
+    .box {
+        width: 140px;
+        height: 140px;
+        background-size: cover;
+        border-radius: 50%;
+        border: 4px solid #ccc;
+        margin: auto;
+        position: absolute;
+        top: 70%;
+        left: 50%;
+        margin-top: -25px;
+        margin-left: -75px;
+    }
+
+        .box img {
+            border-radius: 50%;
+            width: 100%;
+            height: 100%;
+        }
+
+    .h1_content {
+        text-align: center;
+        margin-top: 35px;
+    }
+
+        .h1_content p {
+            color: #000;
+            font-size: 18px;
+        }
+
+    .content_shopp {
+        width: 900px;
+        height: 64px;
+        margin: auto;
+        background-color: #f2f2f2;
+        display: flex;
+        justify-content: space-between;
+        border-radius: 8px;
+        margin-top: 20px;
+    }
+
+    .c_shop {
+        font-size: 18px;
+        color: #0066ff;
+        line-height: 20px;
+        padding-left: 15px;
+        border-bottom: 4px solid #0066ff;
+        padding-top: 15px;
+    }
+
+    .c_shop1 a {
+        float: right;
+        margin-right: 20px;
+        width: 110px;
+        height: 37px;
+        background-color: #0066ff;
+        border-radius: 5px;
+        text-decoration: none;
+        color: #fff;
+        font-size: 17px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 10px;
+        padding-top: 4px;
+    }
+
+    .product_groud {
+        width: 80%;
+    }
+
+    .h5_f {
+        font-size: 18px;
+        padding-top: 5px;
+    }
+
+    .p1 {
+        margin-bottom: 2px;
+    }
+</style>
+
+
+<script src='https://cdn.jsdelivr.net/gh/vietblogdao/js/districts.min.js'></script>
+
+<script>
+    //<![CDATA[
+    if (address_2 = localStorage.getItem('address_2_saved')) {
+        $('select[name="calc_shipping_district"] option').each(function () {
+            if ($(this).text() == address_2) {
+                $(this).attr('selected', '')
+            }
+        })
+        $('input.billing_address_2').attr('value', address_2)
+    }
+    if (district = localStorage.getItem('district')) {
+        $('select[name="calc_shipping_district"]').html(district)
+        $('select[name="calc_shipping_district"]').on('change', function () {
+            var target = $(this).children('option:selected')
+            target.attr('selected', '')
+            $('select[name="calc_shipping_district"] option').not(target).removeAttr('selected')
+            address_2 = target.text()
+            $('input.billing_address_2').attr('value', address_2)
+            district = $('select[name="calc_shipping_district"]').html()
+            localStorage.setItem('district', district)
+            localStorage.setItem('address_2_saved', address_2)
+        })
+    }
+    $('select[name="calc_shipping_provinces"]').each(function () {
+        var $this = $(this),
+            stc = ''
+        c.forEach(function (i, e) {
+            e += +1
+            stc += '<option value=' + e + '>' + i + '</option>'
+            $this.html('<option value="">Tỉnh / Thành phố</option>' + stc)
+            if (address_1 = localStorage.getItem('address_1_saved')) {
+                $('select[name="calc_shipping_provinces"] option').each(function () {
+                    if ($(this).text() == address_1) {
+                        $(this).attr('selected', '')
+                    }
+                })
+                $('input.billing_address_1').attr('value', address_1)
+            }
+            $this.on('change', function (i) {
+                i = $this.children('option:selected').index() - 1
+                var str = '',
+                    r = $this.val()
+                if (r != '') {
+                    arr[i].forEach(function (el) {
+                        str += '<option value="' + el + '">' + el + '</option>'
+                        $('select[name="calc_shipping_district"]').html('<option value="">Quận / Huyện</option>' + str)
+                    })
+                    var address_1 = $this.children('option:selected').text()
+                    var district = $('select[name="calc_shipping_district"]').html()
+                    localStorage.setItem('address_1_saved', address_1)
+                    localStorage.setItem('district', district)
+                    $('select[name="calc_shipping_district"]').on('change', function () {
+                        var target = $(this).children('option:selected')
+                        target.attr('selected', '')
+                        $('select[name="calc_shipping_district"] option').not(target).removeAttr('selected')
+                        var address_2 = target.text()
+                        $('input.billing_address_2').attr('value', address_2)
+                        district = $('select[name="calc_shipping_district"]').html()
+                        localStorage.setItem('district', district)
+                        localStorage.setItem('address_2_saved', address_2)
+                    })
+                } else {
+                    $('select[name="calc_shipping_district"]').html('<option value="">Quận / Huyện</option>')
+                    district = $('select[name="calc_shipping_district"]').html()
+                    localStorage.setItem('district', district)
+                    localStorage.removeItem('address_1_saved', address_1)
+                }
+            })
+        })
+    })
+    //]]></script>
+
+<script>
+    function ValidateNumber(e) {
+        var evt = (e) ? e : window.event;
+        var charCode = (evt.keyCode) ? evt.keyCode : evt.which;
+        if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+            return false;
+        }
+        return true;
+    };
+</script>

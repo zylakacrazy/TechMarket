@@ -1,0 +1,147 @@
+﻿@{
+    ViewBag.Title = "Category";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    TechMarket.Models.SGDFleaMarketEntities db = new TechMarket.Models.SGDFleaMarketEntities();
+
+    if (Request.QueryString["shop"] == null)
+    {
+        int idnd = int.Parse(User.Identity.Name);
+        int slsp = db.tbl_Product.Where(x => x.id_account == idnd&& x.id_shop == null).Count();
+        if (slsp >= 3)
+        {
+            <script language='javascript' type='text/javascript'>
+                alert('Số lượng sản phẩm đã đạt giới hạn!');
+                window.location.href = ('../../Home/Index');
+            </script>
+        }
+    }
+}
+
+<div class="banner-pr-a00">
+    <h2>Loại sản phẩm</h2>
+</div>
+<div class="pr-a00-b01">
+    <a href="~/Product/addProduct?id=1">
+        <div class="pr-b01">
+            <i class="fas fa-mobile-alt"></i>
+            <span>Điện thoại</span>
+        </div>
+    </a>
+    <a href="~/Product/addProduct?id=2">
+        <div class="pr-b01">
+            <i class="fas fa-tablet-alt"></i>
+            <span>Máy tính bảng</span>
+        </div>
+    </a>
+    <a href="~/Product/addProduct?id=3">
+        <div class="pr-b01">
+            <i class="fas fa-laptop"></i>
+            <span>Laptop</span>
+        </div>
+    </a>
+    <a href="~/Product/addProduct?id=4">
+        <div class="pr-b01">
+            <i class="fas fa-desktop"></i>
+            <span>
+                Máy tính để bàn
+            </span>
+        </div>
+    </a>
+    <a href="~/Product/addProduct?id=5">
+        <div class="pr-b01">
+            <i class="fas fa-camera"></i>
+            <span>Máy ảnh, máy quay</span>
+        </div>
+    </a>
+    <a href="~/Product/addProduct?id=6">
+        <div class="pr-b01">
+            <i class="fas fa-tv"></i>
+            <span>Tivi, âm thanh</span>
+        </div>
+    </a>
+    <a href="~/Product/addProduct?id=7">
+        <div class="pr-b01">
+            <i class="fas fa-stopwatch"></i>
+            <span>Thiết bị đeo tay</span>
+        </div>
+    </a>
+    <a href="~/Product/addProduct?id=8">
+        <div class="pr-b01">
+            <img src="https://bizweb.dktcdn.net/100/422/317/themes/813544/assets/menu_icon_6.png?1628841794841" />
+            <span>Phụ kiện máy tính</span>
+        </div>
+    </a>
+    <a href="~/Product/addProduct?id=9">
+        <div class="pr-b01">
+            <img src="https://iweb.tatthanh.com.vn/pic/3/service/images/thiet-ke-website-ban-phu-kien(1).png" />
+            <span>Phụ kiện điện thoại</span>
+        </div>
+    </a>
+    <a href="~/Product/addProduct?id=10">
+        <div class="pr-b01">
+            <img src="http://vitinhkita.com/uploads/source/icon/800px_COLOURBOX22034865.jpg" />
+            <span>Linh kiện máy tính</span>
+        </div>
+    </a>
+</div>
+
+<style>
+    .pr-a00-b01 {
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        margin-top: 4rem;
+        flex-wrap: wrap;
+    }
+
+    .pr-b01 {
+        width: 150px;
+        height: 85px;
+        box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+        margin: 0 5px;
+        margin-bottom: 4rem;
+        border-radius: 15px;
+        display: flex;
+        flex-direction: column;
+    }
+
+        .pr-b01 i {
+            font-size: 35px;
+            margin: auto;
+        }
+
+        .pr-b01 span {
+            text-align: center;
+            color: #000;
+        }
+
+        .pr-b01 img {
+            width: 40px;
+            height: 40px;
+            margin: auto;
+        }
+
+    .banner-pr-a00 {
+        background-image: url("https://images.unsplash.com/photo-1614624532983-4ce03382d63d?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1331&q=80");
+        width: 90%;
+        height: 250px;
+        margin: auto;
+        border-radius: 10px;
+        margin-bottom: 2rem;
+        margin-top: 1rem;
+        background-position: -50px;
+    }
+
+        .banner-pr-a00 h2 {
+            display: flex;
+            justify-content: center;
+            padding-top: 6rem;
+            color: #fff;
+            text-transform: uppercase;
+        }
+
+    .pr-b01 i {
+        color: #000;
+    }
+</style>
